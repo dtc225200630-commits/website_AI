@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý lớp học | Scholarly</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900">
+  {% from "partials/brand.html" import brand_block, teacher_sidebar_brand %}
+  <header class="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl shadow-sm flex items-center justify-between px-6 py-3">
+    <div class="flex items-center gap-8">
+      {{ brand_block('/teacher-dashboard') }}
+      <div class="hidden md:flex items-center bg-slate-100 px-4 py-1.5 rounded-full border-none">
+        <span class="material-symbols-outlined text-slate-400 mr-2 text-sm">search</span>
+        <input id="global-search" class="bg-transparent border-none focus:ring-0 text-sm w-64 placeholder-slate-400" placeholder="Tìm sinh viên hoặc lớp..." type="text"/>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      {% include "partials/teacher_header_user.html" %}
+    </div>
+  </header>
+
+  <aside class="fixed left-0 top-0 h-full w-64 z-50 bg-slate-50 border-r border-slate-200/40 flex flex-col py-6">
+    {{ teacher_sidebar_brand() }}
+    <nav class="flex-1 space-y-1">
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher-dashboard"><span class="material-symbols-outlined">dashboard</span><span>Bảng điều khiển</span></a>
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher/submissions"><span class="material-symbols-outlined">terminal</span><span>Bài kiểm tra</span></a>
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher/agents"><span class="material-symbols-outlined">smart_toy</span><span>Tác nhân AI</span></a>
+      <a class="flex items-center gap-3 py-3 border-l-2 border-orange-600 text-orange-600 font-semibold pl-4 text-sm bg-transparent transition-all" href="/teacher/classrooms"><span class="material-symbols-outlined">group</span><span>Lớp học</span></a>
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher/reports"><span class="material-symbols-outlined">analytics</span><span>Báo cáo</span></a>
+    </nav>
+    <div class="px-4 mb-6"><a href="/teacher/assignment/new" class="block w-full text-center py-3 bg-orange-600 text-white rounded-xl text-sm font-bold shadow-sm hover:bg-red-600 transition-colors active:scale-95 duration-150">Tạo nhiệm vụ mới</a></div>
+  </aside>
+
+  <main class="ml-64 pt-24 px-8 pb-12">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <h1 class="text-3xl font-extrabold">Quản lý Lớp học</h1>
+        <p class="text-sm text-slate-600 mt-1">Lọc theo lớp, tìm kiếm sinh viên, xem nhanh điểm và breakdown đánh giá chi tiết.</p>
+      </div>
+      <span class="text-sm text-slate-500">Ngày: {{ today }}</span>
+    </div>
+
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      {% for c in classrooms %}
+      <div class="bg-white rounded-xl shadow p-4 border border-slate-100 classroom-card" data-class-id="{{ c.class_id }}">
+        <p class="text-xs uppercase tracking-wide text-slate-500">{{ c.class_name }}</p>
+        <p class="text-sm text-slate-600 mt-1">{{ c.semester }} - {{ c.academic_year }}</p>
+        <div class="mt-3 text-sm text-slate-700">{{ c.total_students }} SV | {{ c.total_submissions }} bài nộp</div>
+        <div class="mt-1 text-lg font-bold text-orange-600">{{ c.avg_score }}/100</div>
+      </div>
+      {% endfor %}
+    </section>
+
+    <section class="bg-white rounded-xl shadow p-4 border border-slate-100 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div>
+          <label class="text-xs font-semibold text-slate-500">Lọc theo lớp</label>
+          <select id="class-filter" class="w-full rounded-lg border-slate-300 mt-1">
+            <option value="">Tất cả lớp</option>
+            {% for c in classrooms %}
+            <option value="{{ c.class_id }}">{{ c.class_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="md:col-span-2">
+          <label class="text-xs font-semibold text-slate-500">Tìm theo tên sinh viên / email</label>
+          <input id="keyword-filter" type="text" class="w-full rounded-lg border-slate-300 mt-1" placeholder="Nhập từ khóa..."/>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-xl shadow overflow-hidden border border-slate-100">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50">
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Sinh viên</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Lớp</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Sđ bài nộp</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Điểm TB</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Breakdown TB (S/A/R/C/T)</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Nộp gần nhất</th>
+            </tr>
+          </thead>
+          <tbody id="students-body" class="divide-y divide-slate-100">
+            {% if students and students|length > 0 %}
+              {% for s in students %}
+              <tr class="student-row hover:bg-slate-50" data-class-id="{{ s.class_id }}" data-search="{{ (s.student_name ~ ' ' ~ (s.email or '') ~ ' ' ~ s.class_name)|lower }}">
+                <td class="px-4 py-3 text-sm font-semibold text-slate-900">
+                  {{ s.student_name }}
+                  <div class="text-xs text-slate-500 font-normal">{{ s.email or '--' }}</div>
+                </td>
+                <td class="px-4 py-3 text-sm text-slate-700">{{ s.class_name }}</td>
+                <td class="px-4 py-3 text-sm text-slate-700">{{ s.submission_count }}</td>
+                <td class="px-4 py-3 text-sm font-bold {% if s.avg_total_score >= 80 %}text-emerald-700{% elif s.avg_total_score >= 60 %}text-amber-700{% else %}text-rose-700{% endif %}">{{ s.avg_total_score }}</td>
+                <td class="px-4 py-3 text-xs text-slate-600">
+                  {{ s.syntax_avg }}/{{ s.analysis_avg }}/{{ s.requirement_avg }}/{{ s.structure_avg }}/{{ s.test_avg }}
+                </td>
+                <td class="px-4 py-3 text-sm text-slate-600">{{ s.latest_submitted_at }}</td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr><td colspan="6" class="px-4 py-5 text-center text-slate-500">Chưa có dữ liệu lớp học.</td></tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+      <div id="no-result" class="hidden px-4 py-4 text-center text-sm text-slate-500 border-t border-slate-100">Không có dữ liệu phù hợp bộ lọc.</div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const classFilter = document.getElementById('class-filter');
+      const keywordFilter = document.getElementById('keyword-filter');
+      const globalSearch = document.getElementById('global-search');
+      const rows = Array.from(document.querySelectorAll('.student-row'));
+      const noResult = document.getElementById('no-result');
+
+      const applyFilter = () => {
+        const classId = (classFilter.value || '').trim();
+        const keyword = ((keywordFilter.value || '') + ' ' + (globalSearch.value || '')).trim().toLowerCase();
+        let visible = 0;
+
+        rows.forEach((row) => {
+          const rowClass = row.getAttribute('data-class-id') || '';
+          const rowText = row.getAttribute('data-search') || '';
+          const classOk = !classId || rowClass === classId;
+          const keywordOk = !keyword || rowText.includes(keyword);
+          const show = classOk && keywordOk;
+          row.style.display = show ? '' : 'none';
+          if (show) visible += 1;
+        });
+
+        noResult.classList.toggle('hidden', visible > 0 || rows.length === 0);
+      };
+
+      classFilter.addEventListener('change', applyFilter);
+      keywordFilter.addEventListener('input', applyFilter);
+      globalSearch.addEventListener('input', applyFilter);
+    })();
+  </script>
+</body>
+</html>
+

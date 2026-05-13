@@ -1,0 +1,31 @@
+{# Scholarly — logo & sidebar; chỉ dùng utility Tailwind mặc định (CDN không cần theme.extend) #}
+{% macro brand_block(home='/') %}
+<a href="{{ home }}" class="group flex items-center gap-2.5 shrink-0 no-underline text-inherit rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/40">
+  <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#003d9b] to-[#001a52] text-white font-['Manrope',sans-serif] text-base font-extrabold shadow-md shadow-blue-900/30 ring-1 ring-white/10">S</span>
+  <span class="flex min-w-0 flex-col leading-tight">
+    <span class="truncate text-lg font-extrabold tracking-tight font-['Manrope',sans-serif] text-blue-900 dark:text-blue-100 group-hover:opacity-90 transition-opacity">Scholarly</span>
+    <span class="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">Chấm bài thông minh</span>
+  </span>
+</a>
+{% endmacro %}
+
+{% macro sidebar_heading(title, subtitle='') %}
+<div class="px-6 mb-4">
+  <p class="text-[11px] font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">{{ title }}</p>
+  {% if subtitle %}
+  <p class="mt-1 text-[10px] leading-snug text-slate-500 dark:text-slate-400">{{ subtitle }}</p>
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% macro teacher_sidebar_brand() %}
+<div class="px-6 mb-6">
+  <a href="/teacher-dashboard" class="group flex items-center gap-3 no-underline text-inherit rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/40">
+    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#003d9b] text-white font-['Manrope',sans-serif] text-lg font-extrabold shadow-md shadow-blue-900/25">S</span>
+    <span class="min-w-0">
+      <span class="block font-['Manrope',sans-serif] text-sm font-bold text-slate-900 leading-tight">Scholarly</span>
+      <span class="block text-xs text-slate-500">Cổng giáo viên</span>
+    </span>
+  </a>
+</div>
+{% endmacro %}

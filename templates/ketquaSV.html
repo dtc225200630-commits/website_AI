@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kết quả chấm bài | Scholarly</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-bright": "#f8f9fb",
+                        "on-tertiary-container": "#ffc6b2",
+                        "inverse-surface": "#2e3132",
+                        "surface-container": "#edeef0",
+                        "secondary": "#4c5d8d",
+                        "on-surface-variant": "#434654",
+                        "tertiary": "#7b2600",
+                        "on-tertiary-fixed-variant": "#812800",
+                        "background": "#f8f9fb",
+                        "surface-container-highest": "#e1e2e4",
+                        "surface-container-high": "#e7e8ea",
+                        "on-secondary-container": "#415382",
+                        "tertiary-fixed": "#ffdbcf",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#b4c5fb",
+                        "surface-tint": "#0c56d0",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#dae2ff",
+                        "primary": "#003d9b",
+                        "tertiary-fixed-dim": "#ffb59b",
+                        "outline": "#737685",
+                        "on-primary-fixed": "#001848",
+                        "on-error-container": "#93000a",
+                        "surface": "#f8f9fb",
+                        "on-surface": "#191c1e",
+                        "on-background": "#191c1e",
+                        "surface-container-low": "#f3f4f6",
+                        "on-secondary-fixed": "#021945",
+                        "inverse-primary": "#b2c5ff",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d9dadc",
+                        "surface-variant": "#e1e2e4",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c3c6d6",
+                        "on-secondary-fixed-variant": "#344573",
+                        "secondary-container": "#b6c8fe",
+                        "on-tertiary-fixed": "#380d00",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-primary-container": "#c4d2ff",
+                        "inverse-on-surface": "#f0f1f3",
+                        "tertiary-container": "#a33500",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#dae2ff",
+                        "primary-container": "#0052cc"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+{% from "partials/brand.html" import brand_block, sidebar_heading %}
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-6 h-16 bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none z-50">
+<div class="flex items-center gap-6 md:gap-10">
+{{ brand_block('/student-dashboard') }}
+<div class="hidden md:flex items-center gap-1 text-sm font-medium font-manrope">
+<a class="text-slate-600 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors px-3 py-2 rounded-lg" href="/student-dashboard">Trang chủ</a>
+<a class="text-slate-600 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors px-3 py-2 rounded-lg" href="/student-assignments">Bài tập</a>
+<a class="text-blue-700 dark:text-blue-400 font-semibold px-3 py-2 rounded-lg bg-blue-50/80 dark:bg-blue-900/30" href="/student-results">Kết quả</a>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 py-8 flex flex-col gap-6 z-40 bg-slate-50 dark:bg-slate-900 pt-20 border-r border-slate-200/80 dark:border-slate-800">
+{{ sidebar_heading('Cổng sinh viên') }}
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 pl-4 py-3 hover:text-blue-600 transition-all" href="/student-dashboard">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-manrope text-sm">Bảng điều khiển</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 pl-4 py-3 hover:text-blue-600 transition-all" href="/student-assignments">
+<span class="material-symbols-outlined" data-icon="code">code</span>
+<span class="font-manrope text-sm">Bài tập</span>
+</a>
+<a class="flex items-center gap-3 text-blue-700 dark:text-blue-400 font-medium border-l-2 border-blue-700 dark:border-blue-400 pl-4 py-3" href="/student-results">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-manrope text-sm">Kết quả</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 pl-4 py-3 hover:text-blue-600 transition-all" href="/student-submission-history">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-manrope text-sm">Lịch sử</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 pl-4 py-3 hover:text-blue-600 transition-all active:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-manrope text-sm">Cài đặt</span>
+</a>
+</nav>
+<div class="mt-auto px-6">
+<div class="bg-blue-100/50 p-4 rounded-xl">
+<p class="text-[10px] font-bold text-blue-800 uppercase mb-2">Trạng thái AI</p>
+<div class="flex items-center gap-2 mb-1">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<span class="text-xs font-semibold text-blue-900">Curator Active</span>
+</div>
+<div class="w-full bg-blue-200 h-1 rounded-full overflow-hidden">
+<div class="bg-primary w-3/4 h-full"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-20 p-8 min-h-screen bg-surface">
+<div class="max-w-6xl mx-auto">
+<!-- Header Section with Asymmetric Layout -->
+<section class="grid grid-cols-12 gap-8 mb-12">
+<div class="col-span-12 lg:col-span-7">
+<h1 class="text-4xl font-extrabold text-on-surface mb-2 tracking-tight">Kết quả Phân tích Bài tập</h1>
+<p class="text-on-surface-variant text-lg leading-relaxed max-w-2xl">
+                        Dựa trên phân tích từ AI Curator, bài nộp của bạn thể hiện tư duy thuật toán tốt nhưng cần tối ưu hóa các trường hợp biên.
+                    </p>
+</div>
+<div class="col-span-12 lg:col-span-5 flex justify-end items-center">
+<div class="relative flex items-center justify-center p-8 bg-surface-container-lowest rounded-full shadow-sm border border-outline-variant/10">
+<svg class="w-32 h-32 transform -rotate-90">
+<circle class="text-surface-container-highest" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="{{ (364.4 * (100 - (result.total | float)) / 100) | int }}" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-black text-primary">{{ result.total | int }}</span>
+<span class="text-[10px] font-bold text-outline uppercase tracking-widest">Điểm số / 100</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Curator Insights (Glassmorphism) -->
+<div class="col-span-12 md:col-span-8 glass-panel p-8 rounded-xl border border-white shadow-sm flex flex-col gap-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-tertiary/10 rounded-full flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<h3 class="text-xl font-bold text-on-surface">Curator Insights</h3>
+</div>
+<div class="space-y-4">
+<div class="p-5 bg-surface-container-low rounded-lg border-l-4 border-primary">
+<p class="text-sm font-medium text-on-surface leading-relaxed">
+                                "Cấu trúc dữ liệu được lựa chọn (Hash Map) rất hiệu quả cho bài toán này, giúp giảm độ phức tạp thời gian từ O(n²) xuống O(n). Tuy nhiên, việc quản lý bộ nhớ đệm chưa tối ưu dẫn đến rò rỉ nhẹ trong Test Case #04."
+                            </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-green-600 mt-1" data-icon="check_circle">check_circle</span>
+<div>
+<p class="text-sm font-bold">Điểm mạnh</p>
+<p class="text-xs text-on-surface-variant">Logic nghiệp vụ rõ ràng, code sạch.</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-amber-600 mt-1" data-icon="warning">warning</span>
+<div>
+<p class="text-sm font-bold">Cần lưu ý</p>
+<p class="text-xs text-on-surface-variant">Xử lý ngoại lệ tại các điểm kết nối API.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Test Suites Summary Card -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/10 flex flex-col gap-4">
+<h4 class="text-sm font-bold uppercase text-outline tracking-wider">Test Suites Results</h4>
+<div class="space-y-3">
+<div class="flex justify-between items-center py-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-500 text-sm" data-icon="task_alt">task_alt</span>
+<span class="text-sm font-medium">Unit Tests</span>
+</div>
+<span class="text-xs font-mono bg-green-100 text-green-800 px-2 py-0.5 rounded">12/12 Pass</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-green-500 text-sm" data-icon="task_alt">task_alt</span>
+<span class="text-sm font-medium">Integration</span>
+</div>
+<span class="text-xs font-mono bg-green-100 text-green-800 px-2 py-0.5 rounded">08/08 Pass</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-sm" data-icon="cancel">cancel</span>
+<span class="text-sm font-medium">Logic Case</span>
+</div>
+<span class="text-xs font-mono bg-error-container text-on-error-container px-2 py-0.5 rounded">03/04 Pass</span>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-surface-container-high">
+<div class="flex justify-between items-center">
+<span class="text-xs text-outline">Thời gian chạy tổng cộng:</span>
+<span class="text-xs font-bold">1.24s</span>
+</div>
+</div>
+</div>
+<!-- Logic Error Case #04 with Code Snippet -->
+<div class="col-span-12 lg:col-span-12 bg-surface-container-low p-8 rounded-xl">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-4">
+<span class="bg-error text-white text-[10px] font-black px-2 py-1 rounded">FAILURE</span>
+<h3 class="text-xl font-bold">Logic Error Case #04: <span class="font-normal text-on-surface-variant">Race Condition in Async Loop</span></h3>
+</div>
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                            Giải thích chi tiết
+                        </button>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<div class="col-span-12 lg:col-span-7">
+<div class="bg-slate-900 rounded-lg p-5 font-mono text-sm leading-relaxed text-slate-300 overflow-x-auto">
+<div class="flex gap-4 opacity-50 mb-4 border-b border-slate-700 pb-2">
+<span class="text-xs">main.js</span>
+<span class="text-xs">Line 142:24</span>
+</div>
+<p><span class="text-blue-400">async function</span> <span class="text-yellow-200">processData</span>(items) {</p>
+<p class="pl-4">  items.<span class="text-blue-300">forEach</span>(<span class="text-blue-400">async</span> (item) =&gt; {</p>
+<p class="pl-8 bg-error/20 border-l-2 border-error -ml-4 pl-8"><span class="text-slate-400">// Error: forEach doesn't wait for await</span></p>
+<p class="pl-8 bg-error/20 border-l-2 border-error -ml-4 pl-8"> <span class="text-blue-400">await</span> <span class="text-yellow-200">saveToDatabase</span>(item);</p>
+<p class="pl-4">  });</p>
+<p>}</p>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-5 flex flex-col justify-center gap-4">
+<div class="bg-white p-4 rounded-lg shadow-sm">
+<h5 class="text-sm font-bold text-error mb-2">Nguyên nhân thất bại:</h5>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                                    Hàm `forEach` không hỗ trợ các callback không đồng bộ theo cách mà bạn mong muốn. Điều này khiến vòng lặp kết thúc trước khi dữ liệu thực sự được lưu, gây ra sự cố khi kiểm tra kết quả cuối cùng.
+                                </p>
+</div>
+<div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+<h5 class="text-sm font-bold text-primary mb-2">Đề xuất sửa đổi:</h5>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                                    Sử dụng vòng lặp `for...of` hoặc `Promise.all(items.map(...))` để đảm bảo tất cả các tác vụ không đồng bộ hoàn thành.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Improvement Roadmap -->
+<div class="col-span-12 bg-white p-8 rounded-xl border border-outline-variant/10">
+<h3 class="text-xl font-bold mb-8">Lộ trình cải thiện (Improvement Roadmap)</h3>
+<div class="relative">
+<!-- Horizontal Timeline Logic -->
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-surface-container-high -translate-y-1/2 hidden md:block"></div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+<!-- Step 1 -->
+<div class="flex flex-col items-center text-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold shadow-lg shadow-primary/20">1</div>
+<div>
+<h4 class="text-sm font-bold">Xử lý Race Condition</h4>
+<p class="text-xs text-on-surface-variant mt-1">Sửa lỗi logic tại Case #04</p>
+</div>
+<div class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded-full">ƯU TIÊN CAO</div>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center text-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold">2</div>
+<div>
+<h4 class="text-sm font-bold">Tối ưu hóa Performance</h4>
+<p class="text-xs text-on-surface-variant mt-1">Giảm độ trễ thực thi &lt; 0.8s</p>
+</div>
+<div class="px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-bold rounded-full">TIẾP THEO</div>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col items-center text-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold">3</div>
+<div>
+<h4 class="text-sm font-bold">Mở rộng Unit Tests</h4>
+<p class="text-xs text-on-surface-variant mt-1">Thêm các bộ lọc biên mới</p>
+</div>
+<div class="px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-bold rounded-full">DAI HẠN</div>
+</div>
+<!-- Step 4 -->
+<div class="flex flex-col items-center text-center gap-4">
+<div class="w-12 h-12 rounded-full border-2 border-dashed border-primary/30 text-primary/50 flex items-center justify-center font-bold">
+<span class="material-symbols-outlined" data-icon="stars">stars</span>
+</div>
+<div>
+<h4 class="text-sm font-bold">Chứng chỉ Hoàn thành</h4>
+<p class="text-xs text-on-surface-variant mt-1">Đạt mốc 95/100 điểm</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button Contextual (Only for Results page) -->
+<div class="fixed bottom-8 right-8 z-50">
+<button class="bg-primary text-on-primary h-14 px-6 rounded-full flex items-center gap-3 shadow-xl hover:scale-105 transition-transform active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="auto_fix">auto_fix</span>
+<span class="font-bold text-sm tracking-wide">Nhờ AI sửa lỗi Code</span>
+</button>
+</div>
+
+<!--  -->
+<div class="mt-12 bg-white p-8 rounded-xl border border-outline-variant/10">
+<h2 class="text-2xl font-bold mb-6">Kết quả chấm bài AI</h2>
+
+<div class="space-y-6">
+  <!-- Syntax Section -->
+  <div class="p-6 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+      <span class="text-lg">🔍</span> Kiểm tra Cú pháp (Syntax)
+    </h3>
+    <p class="text-sm mb-2">
+      <span class="font-semibold">Trạng thái:</span>
+      {% if result.syntax.success %}
+        <span class="text-green-600 font-bold">✓ Thành công</span>
+      {% else %}
+        <span class="text-red-600 font-bold">✗ Lỗi</span>
+      {% endif %}
+    </p>
+    <p class="text-sm font-bold mb-2">
+      Điểm: <span class="text-blue-600 text-lg">{{ result.syntax.score | int }}/25</span>
+    </p>
+    {% if result.syntax.error %}
+    <p class="text-sm text-red-600"><span class="font-semibold">Chi tiết:</span> {{ result.syntax.error }}</p>
+    {% endif %}
+  </div>
+
+  <!-- Requirement Section -->
+  <div class="p-6 bg-green-50 rounded-lg border-l-4 border-green-500">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+      <span class="text-lg">✅</span> Yêu cầu (Requirement)
+    </h3>
+    <p class="text-sm font-bold mb-3">
+      Điểm: <span class="text-green-600 text-lg">{{ result.requirement.score | int }}/25</span>
+    </p>
+    {% if result.requirement.details %}
+    <ul class="space-y-2">
+      {% for item in result.requirement.details %}
+      <li class="text-sm flex items-start gap-2">
+        <span class="{% if '✓' in item %}text-green-500{% else %}text-red-500{% endif %} mt-0.5 font-bold">{% if '✓' in item %}✓{% else %}✗{% endif %}</span>
+        <span>{{ item }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-sm text-gray-600">Chưa có đánh giá chi tiết</p>
+    {% endif %}
+  </div>
+
+  <!-- Structure Section -->
+  <div class="p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+      <span class="text-lg">🏗️</span> Cấu trúc Code (Structure)
+    </h3>
+    <p class="text-sm font-bold mb-3">
+      Điểm: <span class="text-yellow-600 text-lg">{{ result.structure.score | int }}/25</span>
+    </p>
+    {% if result.structure.details %}
+    <ul class="space-y-2">
+      {% for item in result.structure.details %}
+      <li class="text-sm flex items-start gap-2">
+        <span class="{% if '✓' in item %}text-green-500{% else %}text-gray-400{% endif %} mt-0.5 font-bold">{% if '✓' in item %}✓{% else %}•{% endif %}</span>
+        <span>{{ item }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-sm text-gray-600">Chưa có đánh giá chi tiết</p>
+    {% endif %}
+  </div>
+
+  <!-- Test Section -->
+  <div class="p-6 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+      <span class="text-lg">🧪</span> Kiểm tra Test (Test Cases)
+    </h3>
+    <p class="text-sm font-bold mb-3">
+      Điểm: <span class="text-purple-600 text-lg">{{ result.test.score | int }}/25</span>
+    </p>
+    {% if result.test.details %}
+
+    <ul class="space-y-2">
+      {% for item in result.test.details %}
+      <li class="text-sm flex items-start gap-2">
+        <span class="{% if 'PASS' in item or '✓' in item %}text-green-500{% else %}text-red-500{% endif %} mt-0.5 font-bold">{% if 'PASS' in item or '✓' in item %}✓{% else %}✗{% endif %}</span>
+        <span>{{ item }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-sm text-gray-600">Chưa có đánh giá chi tiết</p>
+    {% endif %}
+  </div>
+
+  <!-- LLM Analysis Section -->
+  <div class="p-6 bg-indigo-50 rounded-lg border-l-4 border-indigo-500">
+    <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+      <span class="text-lg">🤖</span> AI Phân tích (LLM Feedback)
+    </h3>
+    <p class="text-sm font-bold mb-3">
+      Điểm AI: <span class="text-indigo-600 text-lg">{{ result.llm.score | int }}/25</span>
+    </p>
+    {% if result.llm.feedback and result.llm.feedback != 'Không có phân tích AI' %}
+    <div class="bg-white p-4 rounded border border-indigo-200 max-h-64 overflow-y-auto">
+      <p class="text-sm text-gray-700 leading-relaxed break-words">{{ result.llm.feedback }}</p>
+    </div>
+    {% else %}
+    <p class="text-sm text-gray-600">Chưa có phân tích AI</p>
+    {% endif %}
+  </div>
+
+  <!-- Total Score -->
+  <div class="p-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg border-0 text-white">
+    <h3 class="text-base font-semibold opacity-90 mb-2">TỔNG ĐIỂM</h3>
+    <div class="flex items-baseline justify-between">
+      <span class="text-5xl font-black">{{ result.total | int }}</span>
+      <span class="text-3xl opacity-75">/100</span>
+    </div>
+    <p class="text-sm mt-4 opacity-90">
+      {% if result.total >= 90 %}
+        Xuất sắc! Bài làm của bạn rất tốt.
+      {% elif result.total >= 80 %}
+        Tốt lắm! Bài làm đạt chất lượng khá.
+      {% elif result.total >= 70 %}
+        Được rồi! Nhưng vẫn có chỗ cần cải thiện.
+      {% elif result.total >= 60 %}
+        Cần cố gắng hơn để đạt điểm cao hơn.
+      {% else %}
+        Cần ôn lại kiến thức và làm lại bài.
+      {% endif %}
+    </p>
+  </div>
+</div>
+</div>
+</main>
+
+
+</body></html>

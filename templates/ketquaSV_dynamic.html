@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kết quả chấm bài | Scholarly</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-bright": "#f8f9fb",
+                        "on-tertiary-container": "#ffc6b2",
+                        "inverse-surface": "#2e3132",
+                        "surface-container": "#edeef0",
+                        "secondary": "#4c5d8d",
+                        "on-surface-variant": "#434654",
+                        "tertiary": "#7b2600",
+                        "on-tertiary-fixed-variant": "#812800",
+                        "background": "#f8f9fb",
+                        "surface-container-highest": "#e1e2e4",
+                        "surface-container-high": "#e7e8ea",
+                        "on-secondary-container": "#415382",
+                        "tertiary-fixed": "#ffdbcf",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#b4c5fb",
+                        "surface-tint": "#0c56d0",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#dae2ff",
+                        "primary": "#003d9b",
+                        "tertiary-fixed-dim": "#ffb59b",
+                        "outline": "#737685",
+                        "on-primary-fixed": "#001848",
+                        "on-error-container": "#93000a",
+                        "surface": "#f8f9fb",
+                        "on-surface": "#191c1e",
+                        "on-background": "#191c1e",
+                        "surface-container-low": "#f3f4f6",
+                        "on-secondary-fixed": "#021945",
+                        "inverse-primary": "#b2c5ff",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d9dadc",
+                        "surface-variant": "#e1e2e4",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c3c6d6",
+                        "on-secondary-fixed-variant": "#344573",
+                        "secondary-container": "#b6c8fe",
+                        "on-tertiary-fixed": "#380d00",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-primary-container": "#c4d2ff",
+                        "inverse-on-surface": "#f0f1f3",
+                        "tertiary-container": "#a33500",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#dae2ff",
+                        "primary-container": "#0052cc"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+{% from "partials/brand.html" import brand_block, sidebar_heading, teacher_sidebar_brand %}
+{% set viewer_role = viewer_role if viewer_role is defined else 'student' %}
+{% if viewer_role == 'teacher' %}
+<!-- TopNavBar (giáo viên) -->
+<header class="fixed top-0 w-full flex justify-between items-center px-6 h-16 bg-white border-b border-slate-200 shadow-sm z-50">
+<div class="flex items-center gap-6 md:gap-8">
+{{ brand_block('/teacher-dashboard') }}
+<p class="hidden sm:block text-sm text-slate-600 font-manrope">Bài nộp · <span class="font-semibold text-slate-900">{{ submission.student_name if submission else '' }}</span></p>
+</div>
+<div class="flex items-center gap-2 text-sm font-semibold">
+<a class="text-orange-700 hover:underline px-2 py-1 rounded-lg no-underline" href="/teacher/submissions">Danh sách nộp</a>
+<a class="text-slate-600 hover:bg-slate-100 px-3 py-2 rounded-lg no-underline" href="/teacher-dashboard">Dashboard</a>
+</div>
+</header>
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-slate-50 border-r border-slate-200 flex flex-col py-6 pt-20">
+{{ teacher_sidebar_brand() }}
+<nav class="flex-1 space-y-1 px-2">
+<a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all no-underline" href="/teacher-dashboard"><span class="material-symbols-outlined">dashboard</span><span>Bảng điều khiển</span></a>
+<a class="flex items-center gap-3 py-3 border-l-2 border-orange-600 text-orange-600 font-semibold pl-4 text-sm no-underline" href="/teacher/submissions"><span class="material-symbols-outlined">terminal</span><span>Bài nộp</span></a>
+<a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all no-underline" href="/teacher/classrooms"><span class="material-symbols-outlined">group</span><span>Lớp học</span></a>
+</nav>
+</aside>
+{% else %}
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-6 h-16 bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 shadow-sm dark:shadow-none z-50">
+<div class="flex items-center gap-6 md:gap-10">
+{{ brand_block('/student-dashboard') }}
+<div class="hidden md:flex items-center gap-1 text-sm font-medium font-manrope">
+<a class="text-slate-600 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors px-3 py-2 rounded-lg" href="/student-dashboard">Trang chủ</a>
+<a class="text-slate-600 dark:text-slate-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors px-3 py-2 rounded-lg" href="/student-assignments">Bài tập</a>
+<a class="text-blue-700 dark:text-blue-400 font-semibold px-3 py-2 rounded-lg bg-blue-50/80 dark:bg-blue-900/30" href="/student-results">Kết quả</a>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 py-8 flex flex-col gap-6 z-40 bg-slate-50 dark:bg-slate-900 pt-20 border-r border-slate-200/80 dark:border-slate-800">
+{{ sidebar_heading('Cổng sinh viên') }}
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 pl-4 py-3 hover:text-blue-600 transition-all" href="/student-assignments">
+<span class="material-symbols-outlined" data-icon="code">code</span>
+<span class="font-manrope text-sm">Bài tập</span>
+</a>
+<a class="flex items-center gap-3 text-blue-700 dark:text-blue-400 font-medium border-l-2 border-blue-700 dark:border-blue-400 pl-4 py-3" href="/student-results">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-manrope text-sm">Kết quả</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 pl-4 py-3 hover:text-blue-600 transition-all" href="/student-submission-history">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-manrope text-sm">Lịch sử nộp</span>
+</a>
+</nav>
+</aside>
+{% endif %}
+
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-20 p-8 min-h-screen bg-surface">
+<div class="max-w-6xl mx-auto">
+
+<!-- Header Section with Score Circle (Dynamic) -->
+<section class="grid grid-cols-12 gap-8 mb-12">
+<div class="col-span-12 lg:col-span-7">
+<h1 class="text-4xl font-extrabold text-on-surface mb-2 tracking-tight">Kết quả Chấm Bài</h1>
+<p class="text-on-surface-variant text-lg leading-relaxed max-w-2xl">
+  {% if submission and assignment %}
+  <strong>{{ assignment.title }}</strong>
+  {% if viewer_role == 'teacher' %}
+  — Sinh viên: <strong>{{ submission.student_name }}</strong>
+  {% endif %}
+  — Nộp lúc {{ submission.submitted_at.strftime('%d/%m/%Y %H:%M') }}
+  {% else %}
+  Kết quả chấm bài của bạn từ hệ thống Multi-Agent AI
+  {% endif %}
+</p>
+</div>
+<div class="col-span-12 lg:col-span-5 flex justify-end items-center">
+<div class="relative flex items-center justify-center p-8 bg-surface-container-lowest rounded-full shadow-sm border border-outline-variant/10">
+<svg class="w-32 h-32 transform -rotate-90">
+<circle class="text-surface-container-highest" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="{% if evaluation.total_score >= 90 %}text-green-500{% elif evaluation.total_score >= 70 %}text-blue-500{% elif evaluation.total_score >= 50 %}text-yellow-500{% else %}text-red-500{% endif %}" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="{% if evaluation.total_score %}{{ (364.4 * (100 - evaluation.total_score) / 100) | int }}{% else %}0{% endif %}" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-black {% if evaluation.total_score >= 90 %}text-green-600{% elif evaluation.total_score >= 70 %}text-primary{% elif evaluation.total_score >= 50 %}text-yellow-600{% else %}text-red-600{% endif %}">{{ evaluation.total_score | int if evaluation else '0' }}</span>
+<span class="text-[10px] font-bold text-outline uppercase tracking-widest">Điểm số / 100</span>
+</div>
+</div>
+</div>
+</section>
+
+<section class="mb-6">
+  <p class="text-xs text-on-surface-variant">
+    Công thức điểm tổng: <strong>Cú pháp + Yêu cầu + Cấu trúc + Phân tích + Test</strong> (mỗi mục tối đa 20, tổng 100).<br/>
+    Mục <strong>LLM</strong> dùng để hỗ trợ nhận xét, <strong>không cộng</strong> vào tổng điểm.
+  </p>
+</section>
+
+<section id="submitted-code" class="mb-8 rounded-xl border border-outline-variant/20 bg-surface-container-lowest shadow-sm overflow-hidden">
+<div class="px-5 py-3 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2 bg-slate-50/80">
+<h2 class="text-base font-bold text-on-surface font-headline m-0">Mã nguồn đã nộp</h2>
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">{{ (assignment.programming_language if assignment and assignment.programming_language else (submission.programming_language if submission else '')) or 'Code' }}</span>
+</div>
+<div class="p-0">
+{% if submission and submission.source_code and submission.source_code.strip() %}
+<pre class="m-0 max-h-[min(70vh,520px)] overflow-auto p-4 text-xs leading-relaxed bg-slate-900 text-slate-100 font-mono whitespace-pre-wrap break-words"><code>{{ submission.source_code | e }}</code></pre>
+{% else %}
+<p class="px-5 py-6 text-sm text-slate-500 m-0">Không có nội dung mã trong bản nộp này.</p>
+{% endif %}
+</div>
+</section>
+
+<!-- Score Breakdown Cards (All Dynamic) -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+
+<!-- Syntax Card (Dynamic) -->
+<div class="col-span-12 md:col-span-6 lg:col-span-3 p-6 bg-{% if evaluation.syntax_score >= 15 %}green{% elif evaluation.syntax_score >= 10 %}blue{% else %}red{% endif %}-50 rounded-lg border-l-4 border-{% if evaluation.syntax_score >= 15 %}green{% elif evaluation.syntax_score >= 10 %}blue{% else %}red{% endif %}-500">
+<h3 class="text-sm font-bold uppercase text-outline mb-2">Cú pháp</h3>
+<p class="text-2xl font-bold text-{% if evaluation.syntax_score >= 15 %}green{% elif evaluation.syntax_score >= 10 %}blue{% else %}red{% endif %}-600">{{ evaluation.syntax_score | int if evaluation else '0' }}/20</p>
+<p class="text-xs text-on-surface-variant mt-2">
+  {% if (evaluation and (evaluation.syntax_score | int) >= 20) or (agent_details and agent_details.get("syntax", {}).get("success", False)) %}
+  <span class="text-green-600">✓ Cú pháp hợp lệ</span>
+  {% else %}
+  <span class="text-red-600">✗ Có lỗi cú pháp/runtime</span>
+  {% endif %}
+</p>
+</div>
+
+<!-- Code Analysis Card (NEW) -->
+<div class="col-span-12 md:col-span-6 lg:col-span-3 p-6 bg-{% if evaluation.code_analysis_score >= 15 %}green{% elif evaluation.code_analysis_score >= 10 %}blue{% else %}yellow{% endif %}-50 rounded-lg border-l-4 border-{% if evaluation.code_analysis_score >= 15 %}green{% elif evaluation.code_analysis_score >= 10 %}blue{% else %}yellow{% endif %}-500">
+<h3 class="text-sm font-bold uppercase text-outline mb-2">Phân tích</h3>
+<p class="text-2xl font-bold text-{% if evaluation.code_analysis_score >= 15 %}green{% elif evaluation.code_analysis_score >= 10 %}blue{% else %}yellow{% endif %}-600">{{ evaluation.code_analysis_score | int if evaluation.code_analysis_score else '0' }}/20</p>
+<p class="text-xs text-on-surface-variant mt-2">
+  Chất lượng code
+</p>
+</div>
+
+<!-- Requirement Card (Dynamic) -->
+<div class="col-span-12 md:col-span-6 lg:col-span-3 p-6 bg-{% if evaluation.requirement_score >= 15 %}green{% elif evaluation.requirement_score >= 10 %}blue{% else %}yellow{% endif %}-50 rounded-lg border-l-4 border-{% if evaluation.requirement_score >= 15 %}green{% elif evaluation.requirement_score >= 10 %}blue{% else %}yellow{% endif %}-500">
+<h3 class="text-sm font-bold uppercase text-outline mb-2">Yêu cầu</h3>
+<p class="text-2xl font-bold text-{% if evaluation.requirement_score >= 15 %}green{% elif evaluation.requirement_score >= 10 %}blue{% else %}yellow{% endif %}-600">{{ evaluation.requirement_score | int if evaluation else '0' }}/20</p>
+<p class="text-xs text-on-surface-variant mt-2">
+  Thỏa mãn {{ agent_details.get("requirement", {}).get("fulfilled", 0) if agent_details else '0' }} yêu cầu
+</p>
+</div>
+
+<!-- Structure Card (Dynamic) -->
+<div class="col-span-12 md:col-span-6 lg:col-span-3 p-6 bg-{% if evaluation.structure_score >= 15 %}green{% elif evaluation.structure_score >= 10 %}blue{% else %}yellow{% endif %}-50 rounded-lg border-l-4 border-{% if evaluation.structure_score >= 15 %}green{% elif evaluation.structure_score >= 10 %}blue{% else %}yellow{% endif %}-500">
+<h3 class="text-sm font-bold uppercase text-outline mb-2">Cấu trúc</h3>
+<p class="text-2xl font-bold text-{% if evaluation.structure_score >= 15 %}green{% elif evaluation.structure_score >= 10 %}blue{% else %}yellow{% endif %}-600">{{ evaluation.structure_score | int if evaluation else '0' }}/20</p>
+<p class="text-xs text-on-surface-variant mt-2">
+  Chất lượng code
+</p>
+</div>
+
+<!-- Test Card (Dynamic) -->
+<div class="col-span-12 md:col-span-6 lg:col-span-3 p-6 bg-{% if evaluation.test_score >= 15 %}green{% elif evaluation.test_score >= 10 %}blue{% else %}red{% endif %}-50 rounded-lg border-l-4 border-{% if evaluation.test_score >= 15 %}green{% elif evaluation.test_score >= 10 %}blue{% else %}red{% endif %}-500">
+<h3 class="text-sm font-bold uppercase text-outline mb-2">Test</h3>
+<p class="text-2xl font-bold text-{% if evaluation.test_score >= 15 %}green{% elif evaluation.test_score >= 10 %}blue{% else %}red{% endif %}-600">{{ evaluation.test_score | int if evaluation else '0' }}/20</p>
+<p class="text-xs text-on-surface-variant mt-2">
+  Vượt qua {{ agent_details.get("test", {}).get("passed_count", 0) if agent_details else '0' }} test cases
+</p>
+</div>
+
+<!-- LLM Card (Dynamic) -->
+<div class="col-span-12 md:col-span-6 lg:col-span-3 p-6 bg-{% if evaluation.llm_score >= 15 %}green{% elif evaluation.llm_score >= 10 %}blue{% else %}yellow{% endif %}-50 rounded-lg border-l-4 border-{% if evaluation.llm_score >= 15 %}green{% elif evaluation.llm_score >= 10 %}blue{% else %}yellow{% endif %}-500">
+<h3 class="text-sm font-bold uppercase text-outline mb-2">LLM</h3>
+<p class="text-2xl font-bold text-{% if evaluation.llm_score >= 15 %}green{% elif evaluation.llm_score >= 10 %}blue{% else %}yellow{% endif %}-600">{{ evaluation.llm_score | int if evaluation else '0' }}/20</p>
+<p class="text-xs text-on-surface-variant mt-2">
+  Đánh giá AI
+</p>
+</div>
+
+</div>
+
+<!-- Detailed Results Sections (All from Backend) -->
+<div class="grid grid-cols-12 gap-6">
+
+<!-- Syntax Section (Dynamic) -->
+{% if agent_details and agent_details.get("syntax") %}
+<div class="col-span-12 p-6 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+<h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+  <span class="text-lg">🔍</span> Kiểm tra Cú pháp (Syntax)
+</h3>
+<p class="text-sm mb-2">
+  <span class="font-semibold">Trạng thái:</span>
+  {% if agent_details.get("syntax", {}).get("success", False) %}
+    <span class="text-green-600 font-bold">✓ Thành công</span>
+  {% else %}
+    <span class="text-red-600 font-bold">✗ Lỗi</span>
+  {% endif %}
+</p>
+<p class="text-sm font-bold mb-2">
+  Điểm: <span class="text-blue-600 text-lg">{{ evaluation.syntax_score | int }}/20</span>
+</p>
+{% if agent_details.get("syntax", {}).get("error") %}
+<p class="text-sm text-red-600"><span class="font-semibold">Chi tiết:</span> {{ agent_details["syntax"]["error"] }}</p>
+{% endif %}
+{% if agent_details.get("syntax", {}).get("details") %}
+<ul class="mt-3 space-y-2">
+  {% for detail in agent_details["syntax"]["details"] %}
+  <li class="text-sm flex items-start gap-2">
+    <span class="text-blue-500 mt-0.5">arrow</span>
+    <span>{{ detail }}</span>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+</div>
+{% endif %}
+
+<!-- Code Analysis Section (NEW) -->
+{% if agent_details and agent_details.get("code_analysis") %}
+<div class="col-span-12 p-6 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+<h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+  <span class="text-lg">📊</span> Phân tích Code (Code Analysis)
+</h3>
+<p class="text-sm font-bold mb-3">
+  Điểm: <span class="text-purple-600 text-lg">{{ evaluation.code_analysis_score | int if evaluation.code_analysis_score else '0' }}/20</span>
+</p>
+{% if agent_details.get("code_analysis", {}).get("summary") %}
+<p class="text-sm text-gray-700 mb-3">{{ agent_details.get("code_analysis", {}).get("summary", "") }}</p>
+{% endif %}
+{% if agent_details.get("code_analysis", {}).get("issues") %}
+<div class="mb-3">
+  <p class="text-sm font-semibold text-red-600 mb-2">Các vấn đề:</p>
+  <ul class="space-y-1">
+    {% for issue in agent_details["code_analysis"]["issues"][:5] %}
+    <li class="text-sm text-red-600">- {{ issue }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% if agent_details.get("code_analysis", {}).get("strengths") %}
+<div>
+  <p class="text-sm font-semibold text-green-600 mb-2">Điểm mạnh:</p>
+  <ul class="space-y-1">
+    {% for strength in agent_details["code_analysis"]["strengths"][:5] %}
+    <li class="text-sm text-green-600">+ {{ strength }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+</div>
+{% endif %}
+
+<!-- Requirement Section (Dynamic) -->
+{% if agent_details and agent_details.get("requirement") %}
+<div class="col-span-12 p-6 bg-green-50 rounded-lg border-l-4 border-green-500">
+<h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+  <span class="text-lg">✅</span> Yêu cầu (Requirement) - {{ agent_details["requirement"]["fulfilled"] }}/{{ agent_details["requirement"]["total"] }}
+</h3>
+<p class="text-sm font-bold mb-3">
+  Điểm: <span class="text-green-600 text-lg">{{ evaluation.requirement_score | int }}/20</span>
+</p>
+{% if agent_details.get("requirement", {}).get("details") %}
+<ul class="space-y-2">
+  {% for detail in agent_details["requirement"]["details"] %}
+  <li class="text-sm flex items-start gap-2">
+    <span class="{% if '✓' in detail %}text-green-500{% else %}text-red-500{% endif %} mt-0.5 font-bold">{% if '✓' in detail %}✓{% else %}✗{% endif %}</span>
+    <span>{{ detail }}</span>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="text-sm text-gray-600">Chưa có đánh giá chi tiết</p>
+{% endif %}
+</div>
+{% endif %}
+
+<!-- Structure Section (Dynamic) -->
+{% if agent_details and agent_details.get("structure") %}
+<div class="col-span-12 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+<h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+  <span class="text-lg">🏗️</span> Cấu trúc Code (Structure)
+</h3>
+<p class="text-sm font-bold mb-3">
+  Điểm: <span class="text-yellow-600 text-lg">{{ evaluation.structure_score | int }}/20</span>
+</p>
+{% if agent_details.get("structure", {}).get("details") %}
+<ul class="space-y-2">
+  {% for detail in agent_details["structure"]["details"] %}
+  <li class="text-sm flex items-start gap-2">
+    {% if '✓' in detail or '✓' in agent_details.get("structure", {}).get("details_status", []) %}
+    <span class="text-green-500 mt-0.5 font-bold">✓</span>
+    {% elif '✗' in detail %}
+    <span class="text-red-500 mt-0.5 font-bold">✗</span>
+    {% else %}
+    <span class="text-yellow-500 mt-0.5">◐</span>
+    {% endif %}
+    <span>{{ detail }}</span>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="text-sm text-gray-600">Chưa có đánh giá chi tiết</p>
+{% endif %}
+</div>
+{% endif %}
+
+<!-- Test Section (Dynamic) -->
+{% if agent_details and agent_details.get("test") %}
+<div class="col-span-12 p-6 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+<h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+  <span class="text-lg">🧪</span> Kết quả Test - {{ agent_details["test"]["passed_count"] }}/{{ agent_details["test"]["total_tests"] }}
+</h3>
+<p class="text-sm font-bold mb-3">
+  Điểm: <span class="text-purple-600 text-lg">{{ evaluation.test_score | int }}/20</span>
+</p>
+{% if agent_details.get("test", {}).get("details") %}
+<ul class="space-y-2">
+  {% for detail in agent_details["test"]["details"] %}
+  <li class="text-sm flex items-start gap-2">
+    {% if 'PASS' in detail %}
+    <span class="text-green-500 mt-0.5 font-bold">✓</span>
+    {% else %}
+    <span class="text-red-500 mt-0.5 font-bold">✗</span>
+    {% endif %}
+    <span>{{ detail }}</span>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% if agent_details.get("test", {}).get("summary") %}
+<p class="text-sm text-gray-600 mt-4">{{ agent_details["test"]["summary"] }}</p>
+{% endif %}
+</div>
+{% endif %}
+
+<!-- LLM Feedback Section (Dynamic) -->
+{% if agent_details and agent_details.get("llm") %}
+<div class="col-span-12 p-6 bg-orange-50 rounded-lg border-l-4 border-orange-500">
+<h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+  <span class="text-lg">🤖</span> AI Review - LLM Score
+</h3>
+<p class="text-sm font-bold mb-3">
+  Điểm: <span class="text-orange-600 text-lg">{{ agent_details.get("llm", {}).get("score", 0) | int }}/20</span>
+</p>
+{% if agent_details.get("llm", {}).get("summary") %}
+<p class="text-sm mb-2"><span class="font-semibold">Tổng quan:</span> {{ agent_details.get("llm", {}).get("summary") }}</p>
+{% endif %}
+{% if agent_details.get("llm", {}).get("teacher_feedback") %}
+<p class="text-sm mb-3"><span class="font-semibold">Nhận xét giáo viên:</span> {{ agent_details.get("llm", {}).get("teacher_feedback") }}</p>
+{% endif %}
+{% if agent_details.get("llm", {}).get("must_fix") %}
+<div class="mb-3">
+  <p class="text-sm font-semibold text-red-600 mb-1">Lỗi bắt buộc sửa:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    {% for item in agent_details.get("llm", {}).get("must_fix", []) %}
+    <li class="text-sm text-red-700">{{ item }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% if agent_details.get("llm", {}).get("improvements") %}
+<div class="mb-3">
+  <p class="text-sm font-semibold text-yellow-700 mb-1">Cần cải thiện:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    {% for item in agent_details.get("llm", {}).get("improvements", []) %}
+    <li class="text-sm text-yellow-800">{{ item }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+{% if agent_details.get("llm", {}).get("suggestions") %}
+<div class="mb-3">
+  <p class="text-sm font-semibold text-blue-700 mb-1">Gợi ý sửa cụ thể:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    {% for item in agent_details.get("llm", {}).get("suggestions", []) %}
+    <li class="text-sm text-blue-800">{{ item }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+<div class="prose prose-sm max-w-none">
+  <p class="text-sm whitespace-pre-wrap">{{ agent_details.get("llm", {}).get("feedback", "No feedback available") }}</p>
+</div>
+</div>
+{% endif %}
+
+</div>
+
+<!-- Chatbot-Style Response (NLG Layer) -->
+{% set response_struct = agent_details.get("response", {}).get("structured", {}) if agent_details else {} %}
+{% set response_text = agent_details.get("response", {}).get("natural_text", "") if agent_details else "" %}
+{% if response_struct %}
+<div class="mt-8 p-6 bg-white rounded-lg border border-outline-variant/10">
+<h3 class="text-lg font-bold mb-4">Phản hồi Tự nhiên (Chatbot)</h3>
+
+{% if response_text %}
+<div class="mb-4 p-4 rounded-lg bg-slate-50 border border-slate-200">
+  <p class="text-sm leading-relaxed">{{ response_text }}</p>
+</div>
+{% endif %}
+
+<div class="grid grid-cols-12 gap-4 mb-4">
+  <div class="col-span-12 md:col-span-6 p-3 rounded-lg bg-blue-50">
+    <p class="text-xs uppercase font-bold text-blue-700 mb-1">Điểm tổng</p>
+    <p class="text-xl font-black text-blue-800">{{ response_struct.get("scores", {}).get("total", 0) }}/100</p>
+  </div>
+  <div class="col-span-12 md:col-span-6 p-3 rounded-lg bg-emerald-50">
+    <p class="text-xs uppercase font-bold text-emerald-700 mb-1">Xếp loại</p>
+    <p class="text-xl font-black text-emerald-800">{{ response_struct.get("scores", {}).get("grade", "") }}</p>
+  </div>
+</div>
+
+<div class="mb-4">
+  <p class="text-sm font-semibold mb-2">Breakdown:</p>
+  <p class="text-sm text-slate-700 leading-relaxed">
+    Syntax {{ response_struct.get("scores", {}).get("syntax", 0) }}/20,
+    Requirement {{ response_struct.get("scores", {}).get("requirement", 0) }}/20,
+    Structure {{ response_struct.get("scores", {}).get("structure", 0) }}/20,
+    Analysis {{ response_struct.get("scores", {}).get("code_analysis", 0) }}/20,
+    Test {{ response_struct.get("scores", {}).get("test", 0) }}/20,
+    LLM Support {{ response_struct.get("scores", {}).get("llm_support", 0) }}/20 (không cộng điểm)
+  </p>
+</div>
+
+{% if response_struct.get("agent_activity") %}
+<div class="mb-4 p-4 rounded-lg bg-slate-50 border border-slate-200">
+  <p class="text-sm font-semibold mb-2">Trạng thái agents:</p>
+  <ul class="space-y-1">
+    {% for item in response_struct.get("agent_activity", []) %}
+    <li class="text-sm">
+      <span class="font-semibold">{{ item.get("agent", "") }}</span>:
+      <span>{{ item.get("status", "") }}</span>
+      <span class="text-slate-500">({{ item.get("score", 0) }}/20)</span>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if response_struct.get("requirement_checks") %}
+<div class="mb-4 p-4 rounded-lg bg-emerald-50 border border-emerald-200">
+  <p class="text-sm font-semibold mb-2 text-emerald-800">Đối chiếu yêu cầu CSDL:</p>
+  <ul class="space-y-1">
+    {% for item in response_struct.get("requirement_checks", []) %}
+    <li class="text-sm {% if item.get('status') == 'MET' %}text-emerald-700{% else %}text-red-700{% endif %}">
+      {% if item.get("status") == "MET" %}✓{% else %}✗{% endif %}
+      {{ item.get("requirement", "") }}
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if response_struct.get("detected_errors") %}
+<div class="mb-4 p-4 rounded-lg bg-red-50 border border-red-200">
+  <p class="text-sm font-semibold mb-2 text-red-700">Lỗi/vấn đề phát hiện:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    {% for item in response_struct.get("detected_errors", []) %}
+    <li class="text-sm text-red-700">{{ item }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if response_struct.get("must_fix") %}
+<div class="mb-4">
+  <p class="text-sm font-semibold text-red-700 mb-1">Cần sửa ngay:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    {% for item in response_struct.get("must_fix", []) %}
+    <li class="text-sm text-red-700">{{ item }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if response_struct.get("suggestions") %}
+<div class="mb-2">
+  <p class="text-sm font-semibold text-blue-700 mb-1">Gợi ý hành động:</p>
+  <ul class="list-disc pl-5 space-y-1">
+    {% for item in response_struct.get("suggestions", []) %}
+    <li class="text-sm text-blue-800">{{ item }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if response_struct.get("auto_assessment") %}
+<div class="mt-4 p-4 rounded-lg bg-blue-50 border border-blue-200">
+  <p class="text-sm font-semibold text-blue-800 mb-1">Nhận xét tự động:</p>
+  <p class="text-sm text-blue-900">{{ response_struct.get("auto_assessment", {}).get("summary", "") }}</p>
+  <p class="text-sm text-blue-900 mt-1"><span class="font-semibold">Bước tiếp theo:</span> {{ response_struct.get("auto_assessment", {}).get("next_step", "") }}</p>
+</div>
+{% endif %}
+</div>
+{% elif evaluation and evaluation.final_feedback %}
+<!-- Final Feedback Summary (Legacy Fallback) -->
+<div class="mt-8 p-6 bg-white rounded-lg border border-outline-variant/10">
+<h3 class="text-lg font-bold mb-4">Tóm tắt Kết quả</h3>
+<p class="text-sm leading-relaxed">{{ evaluation.final_feedback }}</p>
+</div>
+{% endif %}
+
+</div>
+</main>
+
+<!-- Floating back -->
+<div class="fixed bottom-8 right-8 z-50">
+{% if viewer_role == 'teacher' %}
+<a href="/teacher/submissions" class="bg-orange-600 text-white h-14 px-6 rounded-full flex items-center gap-3 shadow-xl hover:scale-105 transition-transform active:scale-95 duration-150 no-underline">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+<span class="font-bold text-sm tracking-wide">Danh sách nộp</span>
+</a>
+{% else %}
+<a href="/student-assignments" class="bg-primary text-on-primary h-14 px-6 rounded-full flex items-center gap-3 shadow-xl hover:scale-105 transition-transform active:scale-95 duration-150 no-underline">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+<span class="font-bold text-sm tracking-wide">Quay lại</span>
+</a>
+{% endif %}
+</div>
+
+</body>
+</html>

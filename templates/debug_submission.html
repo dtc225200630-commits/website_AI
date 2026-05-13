@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Debug Submission</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900">
+  <main class="max-w-6xl mx-auto p-6 space-y-6">
+    <header class="bg-white rounded-lg shadow p-6">
+      <h1 class="text-2xl font-bold">Debug Submission #{{ data.submission_id }}</h1>
+      <p class="text-sm text-slate-600 mt-1">Bài tập: {{ data.assignment_title }} | Sinh viên: {{ data.student_name }}</p>
+      <p class="text-sm text-slate-600">Session: {{ data.session_id }} | Total: <span class="font-semibold">{{ data.total_score }}/100</span></p>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white rounded-lg shadow p-4">
+        <p class="text-xs uppercase text-slate-500">Syntax</p>
+        <p class="text-2xl font-bold">{{ data.syntax_score }}/20</p>
+      </div>
+      <div class="bg-white rounded-lg shadow p-4">
+        <p class="text-xs uppercase text-slate-500">Requirement</p>
+        <p class="text-2xl font-bold">{{ data.requirement_score }}/20</p>
+      </div>
+      <div class="bg-white rounded-lg shadow p-4">
+        <p class="text-xs uppercase text-slate-500">Structure</p>
+        <p class="text-2xl font-bold">{{ data.structure_score }}/20</p>
+      </div>
+      <div class="bg-white rounded-lg shadow p-4">
+        <p class="text-xs uppercase text-slate-500">Test</p>
+        <p class="text-2xl font-bold">{{ data.test_score }}/20</p>
+      </div>
+      <div class="bg-white rounded-lg shadow p-4">
+        <p class="text-xs uppercase text-slate-500">LLM</p>
+        <p class="text-2xl font-bold">{{ data.llm_score }}/20</p>
+      </div>
+      <div class="bg-white rounded-lg shadow p-4">
+        <p class="text-xs uppercase text-slate-500">Code Analysis</p>
+        <p class="text-2xl font-bold">{{ data.code_analysis_score }}/20</p>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-lg shadow p-6">
+      <h2 class="font-semibold text-lg mb-3">Scoring Scale</h2>
+      <ul class="list-disc ml-5 text-sm space-y-1">
+        <li>Core agent range: {{ data.scoring_scale.core_agent_range }}</li>
+        <li>Final total range: {{ data.scoring_scale.final_total_range }}</li>
+        <li>Formula: {{ data.scoring_scale.formula }}</li>
+        {% for gate in data.scoring_scale.gates %}
+        <li>{{ gate }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="bg-white rounded-lg shadow p-6">
+      <h2 class="font-semibold text-lg mb-3">Agent Details (Raw JSON)</h2>
+      <pre class="text-xs overflow-auto bg-slate-100 p-4 rounded">{{ agent_details | tojson(indent=2) }}</pre>
+    </section>
+
+    <section class="bg-white rounded-lg shadow p-6">
+      <h2 class="font-semibold text-lg mb-3">Final Feedback</h2>
+      <p class="text-sm whitespace-pre-wrap">{{ data.final_feedback }}</p>
+    </section>
+  </main>
+</body>
+</html>

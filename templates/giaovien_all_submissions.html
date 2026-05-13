@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tất cả bài nộp | Scholarly</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    h1, h2, h3 {
+      font-family: 'Manrope', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900">
+  {% from "partials/brand.html" import brand_block, teacher_sidebar_brand %}
+  <header class="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl shadow-sm flex items-center justify-between px-6 py-3">
+    <div class="flex items-center gap-8">
+      {{ brand_block('/teacher-dashboard') }}
+      <div class="hidden md:flex items-center bg-slate-100 px-4 py-1.5 rounded-full border-none">
+        <span class="material-symbols-outlined text-slate-400 mr-2 text-sm">search</span>
+        <input class="bg-transparent border-none focus:ring-0 text-sm w-64 placeholder-slate-400" placeholder="Tìm bài hoặc sinh viên..." type="text"/>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      {% include "partials/teacher_header_user.html" %}
+    </div>
+  </header>
+
+  <aside class="fixed left-0 top-0 h-full w-64 z-50 bg-slate-50 border-r border-slate-200/40 flex flex-col py-6">
+    {{ teacher_sidebar_brand() }}
+    <nav class="flex-1 space-y-1">
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher-dashboard">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Bảng điều khiển</span>
+      </a>
+      <a class="flex items-center gap-3 py-3 border-l-2 border-orange-600 text-orange-600 font-semibold pl-4 text-sm bg-transparent transition-all" href="/teacher/submissions">
+        <span class="material-symbols-outlined">terminal</span>
+        <span>Bài kiểm tra</span>
+      </a>
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher/agents">
+        <span class="material-symbols-outlined">smart_toy</span>
+        <span>Tác nhân AI</span>
+      </a>
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher/classrooms">
+        <span class="material-symbols-outlined">group</span>
+        <span>Lớp học</span>
+      </a>
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher/reports">
+        <span class="material-symbols-outlined">analytics</span>
+        <span>Báo cáo</span>
+      </a>
+    </nav>
+    <div class="px-4 mb-6">
+      <a href="/teacher/assignment/new" class="block w-full text-center py-3 bg-orange-600 text-white rounded-xl text-sm font-bold shadow-sm hover:bg-red-600 transition-colors active:scale-95 duration-150">
+        Tạo nhiệm vụ mới
+      </a>
+    </div>
+  </aside>
+
+  <main class="ml-64 pt-24 px-8 pb-12">
+    {% if flash_saved %}
+    <div class="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 px-4 py-2 text-sm text-emerald-900">Đã lưu thay đổi bài tập.</div>
+    {% endif %}
+    {% if flash_deleted %}
+    <div class="mb-4 rounded-lg bg-slate-100 border border-slate-200 px-4 py-2 text-sm text-slate-800">Đã xóa bài tập.</div>
+    {% endif %}
+    {% if flash_error %}
+    <div class="mb-4 rounded-lg bg-rose-50 border border-rose-200 px-4 py-2 text-sm text-rose-900">{{ flash_error }}</div>
+    {% endif %}
+
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
+      <div>
+        <h1 class="text-2xl font-bold">Tất cả bài nộp</h1>
+        <p class="text-sm text-slate-600">Xem nhanh bài nộp của sinh viên, lọc theo lớp và tìm theo tên.</p>
+      </div>
+      <div class="flex items-center gap-2 text-sm">
+        <span class="text-slate-500">Hôm nay: {{ today }}</span>
+        <a href="/teacher-dashboard" class="px-3 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 font-semibold">Về dashboard</a>
+      </div>
+    </div>
+
+    <section class="bg-white rounded-xl shadow p-4 mb-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <h2 class="text-lg font-bold text-slate-900">Bài tập của tôi</h2>
+        <a href="/teacher/assignment/new" class="px-3 py-2 rounded-lg bg-orange-600 text-white text-sm font-semibold hover:bg-orange-700 no-underline">Tạo bài mới</a>
+      </div>
+      <p class="text-xs text-slate-500 mb-3">Sửa requirements, testcases hoặc xóa bài (xóa trong trang sửa).</p>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wide text-slate-500">
+              <th class="px-3 py-2">Bài tập</th>
+              <th class="px-3 py-2">Lớp</th>
+              <th class="px-3 py-2">Hạn nộp</th>
+              <th class="px-3 py-2 text-center">YC</th>
+              <th class="px-3 py-2 text-center">TC</th>
+              <th class="px-3 py-2 text-center">Nộp</th>
+              <th class="px-3 py-2 text-right">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {% if teacher_assignments and teacher_assignments|length > 0 %}
+              {% for a in teacher_assignments %}
+              <tr class="hover:bg-slate-50">
+                <td class="px-3 py-2 font-semibold text-slate-900">{{ a.title }}</td>
+                <td class="px-3 py-2 text-slate-700">{{ a.class_name }}</td>
+                <td class="px-3 py-2 text-slate-600 whitespace-nowrap">{{ a.due_date_display }}</td>
+                <td class="px-3 py-2 text-center text-slate-600">{{ a.req_count }}</td>
+                <td class="px-3 py-2 text-center text-slate-600">{{ a.tc_count }}</td>
+                <td class="px-3 py-2 text-center text-slate-600">{{ a.submission_count }}</td>
+                <td class="px-3 py-2 text-right">
+                  <a href="/teacher/assignment/{{ a.assignment_id }}/edit" class="text-orange-600 font-semibold hover:underline no-underline">Sửa / Xóa</a>
+                </td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="7" class="px-3 py-4 text-center text-slate-500">Chưa có bài tập nào. Tạo bài mới để bắt đầu.</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-xl shadow p-4 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div>
+          <label class="text-xs font-semibold text-slate-500">Lọc theo lớp</label>
+          <select id="class-filter" class="w-full rounded-lg border-slate-300 mt-1">
+            <option value="">Tất cả lớp</option>
+            {% for c in class_filters %}
+            <option value="{{ c.class_id }}">{{ c.class_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="md:col-span-2">
+          <label class="text-xs font-semibold text-slate-500">Tìm theo tên sinh viên / tên bài</label>
+          <input id="keyword-filter" type="text" class="w-full rounded-lg border-slate-300 mt-1" placeholder="Nhập tên sinh viên hoặc bài tập...">
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-xl shadow overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50">
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Sinh viên</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Lớp</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Bài tập</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Nộp lúc</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Tổng điểm</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Breakdown</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Code / AI</th>
+            </tr>
+          </thead>
+          <tbody id="submissions-body" class="divide-y divide-slate-100">
+            {% if submissions and submissions|length > 0 %}
+              {% for item in submissions %}
+              <tr class="submission-row hover:bg-slate-50" data-class-id="{{ item.class_id }}" data-search="{{ (item.student_name ~ ' ' ~ item.assignment_title)|lower }}">
+                <td class="px-4 py-3 text-sm font-semibold text-slate-900">{{ item.student_name }}</td>
+                <td class="px-4 py-3 text-sm text-slate-700">{{ item.class_name }}</td>
+                <td class="px-4 py-3 text-sm text-slate-700">{{ item.assignment_title }}</td>
+                <td class="px-4 py-3 text-sm text-slate-600">{{ item.submitted_at_display }}</td>
+                <td class="px-4 py-3 text-sm font-bold {% if item.total_score >= 80 %}text-emerald-700{% elif item.total_score >= 60 %}text-amber-700{% else %}text-rose-700{% endif %}">
+                  {{ '%.1f'|format(item.total_score or 0) }}/100
+                </td>
+                <td class="px-4 py-3 text-xs text-slate-600">
+                  S: {{ item.syntax_score|int if item.syntax_score is not none else 0 }} |
+                  A: {{ item.code_analysis_score|int if item.code_analysis_score is not none else 0 }} |
+                  R: {{ item.requirement_score|int if item.requirement_score is not none else 0 }} |
+                  C: {{ item.structure_score|int if item.structure_score is not none else 0 }} |
+                  T: {{ item.test_score|int if item.test_score is not none else 0 }}
+                </td>
+                <td class="px-4 py-3 text-sm">
+                  <a href="/submission-result/{{ item.submission_id }}#submitted-code" class="text-slate-700 font-semibold hover:underline mr-2">Xem code</a>
+                  <a href="/submission-result/{{ item.submission_id }}" class="text-orange-600 font-semibold hover:underline">Chấm AI</a>
+                </td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr id="empty-row">
+                <td colspan="7" class="px-4 py-4 text-center text-slate-500">Chưa có bài nộp nào.</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+      <div id="no-result" class="hidden px-4 py-4 text-center text-sm text-slate-500 border-t border-slate-100">
+        Không có kết quả phù hợp bộ lọc.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const classFilter = document.getElementById('class-filter');
+      const keywordFilter = document.getElementById('keyword-filter');
+      const rows = Array.from(document.querySelectorAll('.submission-row'));
+      const noResult = document.getElementById('no-result');
+
+      const applyFilter = () => {
+        const classId = (classFilter.value || '').trim();
+        const keyword = (keywordFilter.value || '').trim().toLowerCase();
+        let visibleCount = 0;
+
+        rows.forEach((row) => {
+          const rowClass = row.getAttribute('data-class-id') || '';
+          const rowText = row.getAttribute('data-search') || '';
+          const classOk = !classId || rowClass === classId;
+          const keywordOk = !keyword || rowText.includes(keyword);
+          const visible = classOk && keywordOk;
+          row.style.display = visible ? '' : 'none';
+          if (visible) visibleCount += 1;
+        });
+
+        noResult.classList.toggle('hidden', visibleCount > 0 || rows.length === 0);
+      };
+
+      classFilter.addEventListener('change', applyFilter);
+      keywordFilter.addEventListener('input', applyFilter);
+    })();
+  </script>
+</body>
+</html>
+

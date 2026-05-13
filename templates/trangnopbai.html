@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html class="light" lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nộp bài | Scholarly</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+}
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, .headline-sm {
+    font-family: 'Manrope', sans-serif;
+}
+/* Khối đề bài kiểu competitive / dark */
+.assignment-problem {
+    background: linear-gradient(180deg, #1e1e1e 0%, #181818 100%);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
+.assignment-problem pre.sample-io {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: #e5e5e5;
+    background: #2d2d2d;
+    border: 1px solid #404040;
+    border-radius: 0.5rem;
+    padding: 0.875rem 1rem;
+    min-height: 4rem;
+}
+.assignment-problem .sample-header {
+    background: rgba(163, 230, 53, 0.92);
+    color: #171717;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    text-align: center;
+    padding: 0.5rem 0.75rem;
+}
+.report-problem-link {
+    font-size: 0.8125rem;
+    color: #a3a3a3;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+.report-problem-link:hover {
+    color: #fafafa;
+}
+</style>
+<script id="tailwind-config">
+tailwind.config = {
+    darkMode: "class",
+    theme: {
+        extend: {
+            colors: {
+                "primary-fixed-dim": "#b2c5ff",
+                "on-tertiary-fixed-variant": "#812800",
+                "outline": "#737685",
+                "surface": "#f8f9fb",
+                "surface-container-high": "#e7e8ea",
+                "on-tertiary-fixed": "#380d00",
+                "error-container": "#ffdad6",
+                "surface-container-lowest": "#ffffff",
+                "tertiary": "#7b2600",
+                "secondary-container": "#b6c8fe",
+                "tertiary-container": "#a33500",
+                "inverse-primary": "#b2c5ff",
+                "on-primary-fixed-variant": "#0040a2",
+                "primary-fixed": "#dae2ff",
+                "inverse-surface": "#2e3132",
+                "outline-variant": "#c3c6d6",
+                "on-tertiary": "#ffffff",
+                "on-background": "#191c1e",
+                "surface-container-low": "#f3f4f6",
+                "surface-container-highest": "#e1e2e4",
+                "tertiary-fixed-dim": "#ffb59b",
+                "on-surface": "#191c1e",
+                "on-secondary-fixed": "#021945",
+                "surface-dim": "#d9dadc",
+                "on-secondary": "#ffffff",
+                "error": "#ba1a1a",
+                "secondary-fixed-dim": "#b4c5fb",
+                "surface-bright": "#f8f9fb",
+                "inverse-on-surface": "#f0f1f3",
+                "primary": "#003d9b",
+                "surface-tint": "#0c56d0",
+                "on-surface-variant": "#434654",
+                "background": "#f8f9fb",
+                "on-tertiary-container": "#ffc6b2",
+                "primary-container": "#0052cc",
+                "surface-variant": "#e1e2e4",
+                "on-primary-fixed": "#001848",
+                "on-primary-container": "#c4d2ff",
+                "on-secondary-container": "#415382",
+                "on-primary": "#ffffff",
+                "on-error-container": "#93000a",
+                "on-secondary-fixed-variant": "#344573",
+                "tertiary-fixed": "#ffdbcf",
+                "on-error": "#ffffff",
+                "secondary": "#4c5d8d",
+                "surface-container": "#edeef0",
+                "secondary-fixed": "#dae2ff"
+            },
+            fontFamily: {
+                "headline": ["Manrope"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+    },
+}
+</script>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex">
+{% from "partials/brand.html" import brand_block, sidebar_heading %}
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 z-50 bg-slate-50 border-r border-slate-200/20 flex flex-col py-6 font-manrope text-sm font-medium">
+{{ sidebar_heading('Cổng sinh viên') }}
+<nav class="flex-1 space-y-1 px-2">
+<a class="flex items-center gap-3 text-slate-600 pl-4 py-3 hover:text-blue-600 transition-all rounded-lg" href="/student-dashboard">
+<span class="material-symbols-outlined">dashboard</span>
+Bảng điều khiển
+</a>
+<a class="flex items-center gap-3 border-l-2 border-blue-700 text-blue-700 font-semibold pl-4 py-3 bg-blue-50/50 rounded-r-lg" href="/student-assignments">
+<span class="material-symbols-outlined">terminal</span>
+Bài tập
+</a>
+<a class="flex items-center gap-3 text-slate-600 pl-4 py-3 hover:text-blue-600 transition-all rounded-lg" href="/student-results">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+Kết quả
+</a>
+<a class="flex items-center gap-3 text-slate-600 pl-4 py-3 hover:text-blue-600 transition-all rounded-lg" href="/student-submission-history">
+<span class="material-symbols-outlined">history</span>
+Lịch sử nộp
+</a>
+</nav>
+<div class="px-2 pb-2 pt-4 border-t border-slate-200">
+<a href="/logout" class="flex items-center justify-center gap-2 w-full rounded-lg py-2.5 text-sm font-semibold text-slate-700 bg-slate-200/80 hover:bg-red-100 hover:text-red-800 transition-colors no-underline">
+<span class="material-symbols-outlined text-xl">logout</span>
+Đăng xuất
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 flex-1 flex flex-col min-h-screen">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 left-64 right-0 z-40 bg-white/80 backdrop-blur-xl shadow-sm flex items-center justify-between px-8 py-4">
+<div class="flex items-center gap-8">
+{{ brand_block('/student-dashboard') }}
+<div class="relative hidden md:block">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">search</span>
+<input class="bg-slate-100 border-none rounded-full pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary w-64" placeholder="Tìm bài tập..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<a href="/logout" class="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 no-underline" title="Đăng xuất">
+<span class="material-symbols-outlined text-xl">logout</span>
+<span class="hidden sm:inline">Thoát</span>
+</a>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-100">
+<div class="text-right">
+<div class="text-xs font-bold text-slate-900">{{ student_profile.full_name if student_profile else 'Sinh viên' }}</div>
+</div>
+<span class="material-symbols-outlined text-3xl text-slate-400">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+{% set requirements = requirements | default([]) %}
+{% set testcases = testcases | default([]) %}
+<div class="mt-20 px-6 md:px-10 py-8 flex flex-col gap-8 flex-1">
+
+<!-- Đề bài / Yêu cầu / Mẫu — dark panel (theo layout competitive) -->
+<section class="assignment-problem rounded-xl border border-neutral-800 max-w-7xl w-full mx-auto">
+<div class="px-5 py-6 md:px-10 md:py-8">
+<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-2">
+<h1 class="text-xl md:text-2xl font-bold text-white leading-snug tracking-tight font-headline order-2 sm:order-1 flex-1">{{ assignment.title }}</h1>
+<a class="report-problem-link order-1 sm:order-2 shrink-0 self-end sm:self-start" href="mailto:?subject={{ ('[Scholarly] Báo lỗi đề: ' ~ assignment.title)|urlencode }}&body={{ ('assignment_id=' ~ (assignment.assignment_id|string) ~ '%0A%0AMô tả lỗi:%0A') }}" title="Gửi email báo lỗi đề bài">
+<span class="material-symbols-outlined text-base">bug_report</span>
+Báo lỗi
+</a>
+</div>
+{% if assignment.due_date_display %}
+<p class="text-xs text-neutral-500 mb-6">Hạn nộp: <span class="text-neutral-400 font-medium">{{ assignment.due_date_display }}</span></p>
+{% endif %}
+
+<h2 class="text-lg font-bold text-white mt-2 mb-3 font-headline">Đề bài</h2>
+<div class="text-[15px] leading-7 text-neutral-300 whitespace-pre-wrap">{{ assignment.description if assignment.description else 'Không có mô tả chi tiết cho bài tập này.' }}</div>
+
+{% if requirements and requirements|length > 0 %}
+<h2 class="text-lg font-bold text-white mt-8 mb-3 font-headline">Yêu cầu</h2>
+<ol class="list-decimal list-outside ml-5 space-y-2.5 text-[15px] leading-relaxed text-neutral-300">
+{% for r in requirements %}
+<li class="pl-1">{{ r.requirement_text }}</li>
+{% endfor %}
+</ol>
+{% endif %}
+
+{% if testcases and testcases|length > 0 %}
+<h2 class="text-lg font-bold text-white mt-8 mb-4 font-headline">Mẫu</h2>
+<div class="space-y-8">
+{% for tc in testcases %}
+<div class="rounded-lg overflow-hidden border border-neutral-700/80">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-neutral-700/80">
+<div class="bg-neutral-900">
+<div class="sample-header flex items-center justify-between px-3">
+<span>Input #{{ loop.index }}</span>
+<button type="button" class="text-neutral-900/80 hover:text-neutral-950 p-0.5 rounded transition-colors copy-io-btn" data-target="in-{{ loop.index }}" title="Sao chép">
+<span class="material-symbols-outlined text-lg">content_copy</span>
+</button>
+</div>
+<pre id="in-{{ loop.index }}" class="sample-io rounded-none border-0 border-t border-neutral-700">{{ tc.input_data }}</pre>
+</div>
+<div class="bg-neutral-900">
+<div class="sample-header flex items-center justify-between px-3">
+<span>Output #{{ loop.index }}</span>
+<button type="button" class="text-neutral-900/80 hover:text-neutral-950 p-0.5 rounded transition-colors copy-io-btn" data-target="out-{{ loop.index }}" title="Sao chép">
+<span class="material-symbols-outlined text-lg">content_copy</span>
+</button>
+</div>
+<pre id="out-{{ loop.index }}" class="sample-io rounded-none border-0 border-t border-neutral-700">{{ tc.expected_output }}</pre>
+</div>
+</div>
+</div>
+{% endfor %}
+</div>
+{% endif %}
+</div>
+</section>
+
+<!-- Submission Layout: Asymmetric Bento -->
+<div class="grid grid-cols-12 gap-6 max-w-7xl flex-1 items-start">
+<!-- Left Column: Upload & Config -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-6">
+<!-- Form Container -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-outline-variant/10">
+<h3 class="text-lg font-bold mb-6 text-on-surface">Thông tin bài tập</h3>
+<form method="POST" action="/submit" enctype="multipart/form-data" class="space-y-6" id="submissionForm">
+<!-- Hidden field for assignment_id only -->
+<input type="hidden" name="assignment_id" value="{{ assignment.assignment_id }}">
+<div class="space-y-6">
+<!-- Class and Teacher Info -->
+<div class="pb-6 border-b border-slate-100">
+<div class="grid grid-cols-2 gap-4">
+<div>
+<div class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Lớp học</div>
+<div class="text-sm font-bold text-on-surface">{{ assignment.class_name }}</div>
+</div>
+{% if assignment.teacher_name %}
+<div>
+<div class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Giáo viên</div>
+<div class="text-sm font-bold text-on-surface">{{ assignment.teacher_name }}</div>
+</div>
+{% endif %}
+</div>
+</div>
+<!-- Language Dropdown -->
+<div>
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Ngôn ngữ lập trình <span class="text-error">*</span></label>
+<div class="relative">
+<select name="programming_language" class="w-full bg-surface-container-low border-none border-b-2 border-surface-variant focus:border-primary focus:ring-0 py-3 pl-4 pr-10 text-sm font-medium appearance-none rounded-t-lg transition-colors" required onchange="updateFileAccept()">
+<option value="">Chọn ngôn ngữ</option>
+{% if assignment.programming_language == 'python' or not assignment.programming_language %}
+<option selected="" value="python">Python (.py)</option>
+{% else %}
+<option value="python">Python (.py)</option>
+{% endif %}
+{% if assignment.programming_language == 'java' %}
+<option selected="" value="java">Java (.java)</option>
+{% else %}
+<option value="java">Java (.java)</option>
+{% endif %}
+{% if assignment.programming_language == 'cpp' %}
+<option selected="" value="cpp">C++ (.cpp, .cc, .cxx)</option>
+{% else %}
+<option value="cpp">C++ (.cpp, .cc, .cxx)</option>
+{% endif %}
+{% if assignment.programming_language == 'javascript' %}
+<option selected="" value="javascript">JavaScript (.js)</option>
+{% else %}
+<option value="javascript">JavaScript (.js)</option>
+{% endif %}
+</select>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined pointer-events-none text-slate-400">expand_more</span>
+</div>
+<div class="text-[10px] text-on-surface-variant mt-2">Chọn ngôn ngữ lập trình của bài nộp</div>
+</div>
+<!-- File Upload Area -->
+<div>
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Tệp mã nguồn (tùy chọn)</label>
+<div class="border-2 border-dashed border-outline-variant/30 rounded-xl bg-surface-container-low/50 p-8 text-center flex flex-col items-center justify-center gap-3 group hover:bg-surface-container-low transition-colors cursor-pointer" onclick="document.getElementById('fileInput').click()">
+<input type="file" id="fileInput" name="file" class="hidden" accept="" onchange="handleFileSelected()">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary shadow-sm group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">upload_file</span>
+</div>
+<div>
+<div class="text-sm font-semibold text-on-surface">Kéo thả tệp vào đây hoặc duyệt</div>
+<div class="text-xs text-on-surface-variant mt-1" id="fileAcceptText">Trước hết chọn ngôn ngữ lập trình</div>
+<div id="fileName" class="text-xs text-primary mt-2 font-bold hidden"></div>
+</div>
+</div>
+</div>
+<!-- Code Text Area -->
+<div>
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Mã nguồn dạng text (nếu không gửi tệp)</label>
+<textarea name="source_code" id="sourceCode" class="w-full bg-surface-container-low border-2 border-surface-variant focus:border-primary focus:ring-0 py-3 px-4 text-sm font-mono rounded-lg transition-colors placeholder-on-surface-variant/50" rows="8" placeholder="Nhập mã code của bạn tại đây hoặc gửi file..."></textarea>
+<div class="text-[10px] text-on-surface-variant mt-2">Bạn có thể nhập code trực tiếp hoặc gửi file. Ít nhất một trong hai cách phải được sử dụng.</div>
+</div>
+</div>
+</form>
+</div>
+<!-- AI Insights Card -->
+<div class="bg-primary/5 p-6 rounded-xl border border-primary/10 flex gap-4">
+<span class="material-symbols-outlined text-primary" data-weight="fill">auto_awesome</span>
+<div>
+<div class="text-sm font-bold text-primary mb-1">Kiểm tra sơ bộ AI đã bật</div>
+<p class="text-xs text-on-primary-fixed-variant leading-relaxed">Mô hình của chúng tôi sẽ tự động phát hiện lỗi cú pháp và thiếu tài liệu hướng dẫn trước khi bạn nộp bài chính thức.</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Code Preview -->
+<div class="col-span-12 lg:col-span-7 h-full">
+<div class="bg-surface-container-lowest h-full min-h-[500px] rounded-xl shadow-sm flex flex-col overflow-hidden border border-outline-variant/10">
+<div class="bg-slate-900 px-6 py-3 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="flex gap-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-error/80"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-yellow-400/80"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-green-400/80"></div>
+</div>
+<span class="text-[11px] font-mono text-slate-400 uppercase tracking-widest">{{ assignment.title | replace(' ', '_') }}.{{ assignment.programming_language or 'py' }}</span>
+</div>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm">content_copy</span>
+</button>
+</div>
+<div class="flex-1 bg-[#0f172a] p-6 font-mono text-sm overflow-auto text-slate-300">
+<div class="flex gap-4">
+<div class="text-slate-600 text-right select-none" id="lineNumbers" style="min-width: 40px;">1</div>
+<div class="text-blue-400" id="codeContent"><span class="text-slate-500">// Nhập hoặc tải tệp mã code để xem trước tại đây</span></div>
+</div>
+</div>
+<div class="p-6 bg-surface-container-low flex items-center justify-between border-t border-slate-100">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+<span class="text-xs font-bold text-on-surface-variant uppercase">Sẵn sàng để phân tích</span>
+</div>
+<button type="submit" form="submissionForm" class="bg-primary text-on-primary px-8 py-4 rounded-full font-bold flex items-center gap-3 shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+Nộp bài đánh giá AI
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Shell -->
+<footer class="w-full mt-12 py-6 border-t border-slate-100 flex flex-col items-center justify-center text-xs text-slate-500">
+<div>© Scholarly — Chấm bài thông minh</div>
+</footer>
+</div>
+</main>
+<!-- Visual Artifacts -->
+<div class="fixed top-0 right-0 w-1/3 h-1/3 bg-primary-fixed/10 blur-[120px] -z-10 pointer-events-none"></div>
+<div class="fixed bottom-0 left-64 w-1/4 h-1/4 bg-tertiary-fixed/10 blur-[100px] -z-10 pointer-events-none"></div>
+
+<script>
+// Copy sample Input / Output (clipboard)
+document.querySelectorAll('.copy-io-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-target');
+        const el = id ? document.getElementById(id) : null;
+        if (!el) return;
+        const text = el.textContent || '';
+        navigator.clipboard.writeText(text).then(() => {
+            const icon = btn.querySelector('.material-symbols-outlined');
+            if (icon) {
+                icon.textContent = 'check';
+                setTimeout(() => { icon.textContent = 'content_copy'; }, 1600);
+            }
+        }).catch(() => {});
+    });
+});
+
+// File extensions allowed for each language
+const langExtensions = {
+    'python': ['.py'],
+    'java': ['.java'],
+    'cpp': ['.cpp', '.cc', '.cxx'],
+    'javascript': ['.js']
+};
+
+// Update file input accept attribute when language changes
+function updateFileAccept() {
+    const langSelect = document.querySelector('select[name="programming_language"]');
+    const fileInput = document.getElementById('fileInput');
+    const fileAcceptText = document.getElementById('fileAcceptText');
+    
+    const lang = langSelect.value;
+    if (lang && langExtensions[lang]) {
+        const exts = langExtensions[lang];
+        fileInput.accept = exts.join(',');
+        fileAcceptText.textContent = 'Cho phép: ' + exts.join(', ');
+    }
+}
+
+// Handle file selection
+function handleFileSelected() {
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+    const codeInput = document.getElementById('sourceCode');
+    
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        fileName.textContent = '✓ Đã chọn: ' + file.name;
+        fileName.classList.remove('hidden');
+        
+        // Read file and show preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            updateCodePreview(e.target.result);
+        };
+        reader.readAsText(file);
+    }
+}
+
+// Update code preview from textarea
+function updateCodePreview(code = null) {
+    const sourceCode = code || document.getElementById('sourceCode').value;
+    const codeContent = document.getElementById('codeContent');
+    const lineNumbers = document.getElementById('lineNumbers');
+    
+    if (!sourceCode.trim()) {
+        codeContent.innerHTML = '<span class="text-slate-500">// Nhập hoặc tải tệp mã code để xem trước tại đây</span>';
+        lineNumbers.textContent = '1';
+        return;
+    }
+    
+    const lines = sourceCode.split('\n');
+    const maxLines = Math.max(lines.length, 12);
+    
+    // Generate line numbers
+    let lineNumbersHTML = '';
+    for (let i = 1; i <= maxLines; i++) {
+        lineNumbersHTML += i + (i < maxLines ? '<br/>' : '');
+    }
+    lineNumbers.innerHTML = lineNumbersHTML;
+    
+    // Escape HTML and create code display
+    const escapeHtml = (text) => {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, m => map[m]);
+    };
+    
+    let codeHTML = '';
+    for (let i = 0; i < Math.max(lines.length, 12); i++) {
+        const line = lines[i] || '';
+        codeHTML += escapeHtml(line) + (i < maxLines - 1 ? '<br/>' : '');
+    }
+    
+    codeContent.innerHTML = codeHTML;
+}
+
+// Listen to textarea changes
+document.getElementById('sourceCode').addEventListener('input', updateCodePreview);
+
+// Initialize on page load
+window.addEventListener('load', function() {
+    updateFileAccept();
+    updateCodePreview();
+});
+</script>
+</body>
+</html>

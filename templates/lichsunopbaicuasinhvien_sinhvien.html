@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lịch sử nộp bài | Scholarly</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#f8f9fb",
+              "on-tertiary-container": "#ffc6b2",
+              "inverse-surface": "#2e3132",
+              "surface-container": "#edeef0",
+              "secondary": "#4c5d8d",
+              "on-surface-variant": "#434654",
+              "tertiary": "#7b2600",
+              "on-tertiary-fixed-variant": "#812800",
+              "background": "#f8f9fb",
+              "surface-container-highest": "#e1e2e4",
+              "surface-container-high": "#e7e8ea",
+              "on-secondary-container": "#415382",
+              "tertiary-fixed": "#ffdbcf",
+              "on-primary-fixed-variant": "#0040a2",
+              "on-primary": "#ffffff",
+              "secondary-fixed-dim": "#b4c5fb",
+              "surface-tint": "#0c56d0",
+              "surface-container-lowest": "#ffffff",
+              "error": "#ba1a1a",
+              "primary-fixed": "#dae2ff",
+              "primary": "#003d9b",
+              "tertiary-fixed-dim": "#ffb59b",
+              "outline": "#737685",
+              "on-primary-fixed": "#001848",
+              "on-error-container": "#93000a",
+              "surface": "#f8f9fb",
+              "on-surface": "#191c1e",
+              "on-background": "#191c1e",
+              "surface-container-low": "#f3f4f6",
+              "on-secondary-fixed": "#021945",
+              "inverse-primary": "#b2c5ff",
+              "on-secondary": "#ffffff",
+              "surface-dim": "#d9dadc",
+              "surface-variant": "#e1e2e4",
+              "error-container": "#ffdad6",
+              "outline-variant": "#c3c6d6",
+              "on-secondary-fixed-variant": "#344573",
+              "secondary-container": "#b6c8fe",
+              "on-tertiary-fixed": "#380d00",
+              "on-tertiary": "#ffffff",
+              "primary-fixed-dim": "#b2c5ff",
+              "on-primary-container": "#c4d2ff",
+              "inverse-on-surface": "#f0f1f3",
+              "tertiary-container": "#a33500",
+              "on-error": "#ffffff",
+              "secondary-fixed": "#dae2ff",
+              "primary-container": "#0052cc"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+{% from "partials/brand.html" import brand_block %}
+{% from "partials/student_subject_filter.html" import subject_filter_bar %}
+{% set ss = submission_stats if submission_stats is defined and submission_stats else {} %}
+{% set qclass = ('&class_id=' ~ selected_class_id|string) if (selected_class_id is defined and selected_class_id is not none) else '' %}
+<header class="fixed top-0 w-full flex justify-between items-center px-6 h-16 bg-slate-50 border-b border-slate-100 z-50">
+<div class="flex items-center gap-4">
+{{ brand_block('/student-dashboard') }}
+</div>
+<div class="flex-1 max-w-xl mx-8 hidden md:block">
+<div class="relative flex items-center bg-surface-container-low rounded-full px-4 py-2 border-b-2 border-surface-variant">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-sm font-label ml-2" placeholder="Tìm bản nộp..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<a href="/logout" class="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-200/80 no-underline" title="Đăng xuất">
+<span class="material-symbols-outlined text-xl">logout</span>
+<span class="hidden sm:inline">Thoát</span>
+</a>
+<div class="flex items-center gap-3 pl-2 border-l border-slate-200">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold font-headline text-on-surface">{{ student_profile.full_name if student_profile else 'Sinh viên' }}</p>
+</div>
+<span class="material-symbols-outlined text-blue-700 text-3xl">account_circle</span>
+</div>
+</div>
+</header>
+{% set active_nav = 'history' %}
+{% include 'partials/student_aside.html' %}
+
+<main class="ml-64 pt-24 p-8 min-h-screen max-w-6xl">
+<header class="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+<div>
+<p class="text-[10px] uppercase tracking-widest text-primary font-bold mb-1">Nhật ký nộp bài</p>
+<h1 class="text-3xl font-headline font-extrabold text-on-surface tracking-tight">Lịch sử nộp bài</h1>
+<p class="text-sm text-outline mt-1">Dữ liệu theo thời gian thực tế từ hệ thống.</p>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center gap-3 text-sm">
+<span class="text-outline">Trang {{ current_page }} / {{ total_pages }}</span>
+<a class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-outline-variant/30 font-semibold text-on-surface hover:bg-surface-container-low transition-colors no-underline" href="/student-dashboard">
+<span class="material-symbols-outlined text-base">arrow_back</span>
+<span>Về bảng điều khiển</span>
+</a>
+</div>
+</header>
+
+{{ subject_filter_bar('/student-submission-history', 'hist') }}
+
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10">
+<p class="text-xs text-outline uppercase tracking-wider">Tổng bản nộp</p>
+<p class="text-2xl font-black font-headline mt-1 text-on-surface">{{ ss['total_submissions']|default(0) }}</p>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10">
+<p class="text-xs text-outline uppercase tracking-wider">Đang chờ chấm</p>
+<p class="text-2xl font-black font-headline mt-1 text-tertiary">{{ ss['pending_eval_count']|default(0) }}</p>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10">
+<p class="text-xs text-outline uppercase tracking-wider">Lỗi biên dịch (0 điểm)</p>
+<p class="text-2xl font-black font-headline mt-1 text-error">{{ ss['compile_error_count']|default(0) }}</p>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10">
+<p class="text-xs text-outline uppercase tracking-wider">Bài ≥ 80 điểm</p>
+<p class="text-2xl font-black font-headline mt-1 text-primary">{{ ss['high_score_count']|default(0) }}</p>
+</div>
+</section>
+
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant/10 shadow-sm overflow-hidden mb-8">
+<div class="px-5 py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
+<div>
+<p class="text-xs font-bold text-on-surface">Tỷ lệ thành công (trang hiện tại)</p>
+<p class="text-sm text-outline">{{ success_rate }}% · {{ total_submissions }} bản nộp tổng</p>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead>
+<tr class="border-b border-slate-200 bg-surface-container-low">
+<th class="px-5 py-3 font-bold text-outline text-xs uppercase tracking-wider">Thời gian</th>
+<th class="px-5 py-3 font-bold text-outline text-xs uppercase tracking-wider">Bài tập</th>
+<th class="px-5 py-3 font-bold text-outline text-xs uppercase tracking-wider">Lớp</th>
+<th class="px-5 py-3 font-bold text-outline text-xs uppercase tracking-wider">Ngôn ngữ</th>
+<th class="px-5 py-3 font-bold text-outline text-xs uppercase tracking-wider">Trạng thái</th>
+<th class="px-5 py-3 font-bold text-outline text-xs uppercase tracking-wider">Điểm</th>
+<th class="px-5 py-3 font-bold text-outline text-xs uppercase tracking-wider text-right">Mở</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+{% if submissions and submissions|length > 0 %}
+{% for s in submissions %}
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="px-5 py-4">
+<p class="text-sm font-semibold text-on-surface">{{ s.submitted_date_display }}</p>
+<p class="text-xs text-outline mt-0.5">{{ s.submitted_time_display }}</p>
+</td>
+<td class="px-5 py-4">
+<span class="text-sm font-medium text-on-surface">{{ s.assignment_title }}</span>
+</td>
+<td class="px-5 py-4 max-w-[10rem]">
+<span class="text-xs text-outline line-clamp-2" title="{{ s.class_name }}">{{ s.class_name if s.class_name else '—' }}</span>
+</td>
+<td class="px-5 py-4">
+<span class="text-[10px] font-bold text-primary uppercase tracking-wider px-2 py-1 rounded-md bg-primary-fixed/40">{{ s.programming_language }}</span>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined {{ s.status_text_class }} text-lg">{{ s.status_icon }}</span>
+<span class="text-sm {{ s.status_text_class }} font-medium">{{ s.status_label }}</span>
+</div>
+</td>
+<td class="px-5 py-4">
+<div class="flex flex-col">
+<span class="text-base font-headline font-bold text-on-surface">{{ s.score_display }}</span>
+<div class="w-20 h-1.5 bg-surface-container mt-1 rounded-full overflow-hidden">
+<div class="h-full {{ s.score_bar_class }} {{ s.score_width_class }}"></div>
+</div>
+</div>
+</td>
+<td class="px-5 py-4 text-right">
+<a class="p-2 rounded-lg bg-surface-container-high hover:bg-primary/10 text-outline hover:text-primary transition-all inline-flex no-underline" href="/assignment/{{ s.assignment_id }}" title="Mở bài">
+<span class="material-symbols-outlined">code</span>
+</a>
+</td>
+</tr>
+{% endfor %}
+{% else %}
+<tr>
+<td class="px-5 py-10 text-center text-outline" colspan="7">Bạn chưa có bản nộp nào.</td>
+</tr>
+{% endif %}
+</tbody>
+</table>
+</div>
+<div class="px-5 py-4 bg-surface-container-low border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+<span class="text-xs text-outline font-medium">
+{% if total_submissions > 0 %}
+Hiển thị {{ start_item }}–{{ end_item }} trong số {{ total_submissions }} bản nộp
+{% else %}
+Tổng số bản nộp: 0
+{% endif %}
+</span>
+<div class="flex gap-2">
+<a class="p-2 rounded-lg bg-surface-container-highest hover:bg-surface-container-high transition-colors text-on-surface {% if not has_prev %}pointer-events-none opacity-30{% endif %} no-underline" href="/student-submission-history?page={{ prev_page }}{{ qclass }}">
+<span class="material-symbols-outlined">chevron_left</span>
+</a>
+<span class="min-w-10 h-10 px-3 rounded-lg bg-primary text-on-primary font-bold text-xs inline-flex items-center justify-center">{{ current_page }} / {{ total_pages }}</span>
+<a class="p-2 rounded-lg bg-surface-container-highest hover:bg-surface-container-high transition-colors text-on-surface {% if not has_next %}pointer-events-none opacity-30{% endif %} no-underline" href="/student-submission-history?page={{ next_page }}{{ qclass }}">
+<span class="material-symbols-outlined">chevron_right</span>
+</a>
+</div>
+</div>
+</section>
+
+<section class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10">
+<h2 class="text-sm font-bold font-headline text-on-surface mb-2">Tóm tắt</h2>
+<p class="text-sm text-outline leading-relaxed">
+Trên toàn bộ bản nộp của bạn: <strong class="text-on-surface">{{ ss['high_score_count']|default(0) }}</strong> bản đạt từ 80 điểm trở lên,
+<strong class="text-on-surface">{{ ss['compile_error_count']|default(0) }}</strong> bản lỗi biên dịch (0 điểm),
+<strong class="text-on-surface">{{ ss['pending_eval_count']|default(0) }}</strong> bản đang chờ kết quả chấm.
+</p>
+</section>
+</main>
+</body></html>

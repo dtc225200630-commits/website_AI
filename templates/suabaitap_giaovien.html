@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sửa bài tập | Scholarly</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900">
+  {% from "partials/brand.html" import brand_block, teacher_sidebar_brand %}
+  <header class="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl shadow-sm flex items-center justify-between px-6 py-3">
+    <div class="flex items-center gap-8">
+      {{ brand_block('/teacher-dashboard') }}
+      <div class="hidden md:flex items-center bg-slate-100 px-4 py-1.5 rounded-full border-none">
+        <span class="material-symbols-outlined text-slate-400 mr-2 text-sm">search</span>
+        <input class="bg-transparent border-none focus:ring-0 text-sm w-64 placeholder-slate-400" placeholder="Tìm bài hoặc sinh viên..." type="text"/>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      {% include "partials/teacher_header_user.html" %}
+    </div>
+  </header>
+
+  <aside class="fixed left-0 top-0 h-full w-64 z-50 bg-slate-50 border-r border-slate-200/40 flex flex-col py-6">
+    {{ teacher_sidebar_brand() }}
+    <nav class="flex-1 space-y-1">
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher-dashboard">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Bảng điều khiển</span>
+      </a>
+      <a class="flex items-center gap-3 py-3 border-l-2 border-orange-600 text-orange-600 font-semibold pl-4 text-sm bg-transparent transition-all" href="/teacher/submissions">
+        <span class="material-symbols-outlined">terminal</span>
+        <span>Bài kiểm tra</span>
+      </a>
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher/agents">
+        <span class="material-symbols-outlined">smart_toy</span>
+        <span>Tác nhân AI</span>
+      </a>
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher/classrooms">
+        <span class="material-symbols-outlined">group</span>
+        <span>Lớp học</span>
+      </a>
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher/reports">
+        <span class="material-symbols-outlined">analytics</span>
+        <span>Báo cáo</span>
+      </a>
+    </nav>
+    <div class="px-4 mb-6">
+      <a href="/teacher/assignment/new" class="block w-full text-center py-3 bg-orange-600 text-white rounded-xl text-sm font-bold shadow-sm hover:bg-red-600 transition-colors active:scale-95 duration-150">
+        Tạo nhiệm vụ mới
+      </a>
+    </div>
+  </aside>
+
+  <main class="ml-64 min-h-screen pt-24 px-8 pb-40">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+      <div>
+        <h1 class="text-2xl font-bold">Sửa bài tập</h1>
+        <p class="text-sm text-slate-600">Cập nhật tiêu đề, mô tả, hạn nộp, requirements, testcases và phạm vi sinh viên.</p>
+      </div>
+      <a href="/teacher/submissions" class="px-4 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 text-sm font-semibold">Quay lại danh sách</a>
+    </div>
+
+    {% if form_error %}
+    <div class="mb-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800 shadow-sm" role="alert">
+      {{ form_error }}
+    </div>
+    {% endif %}
+
+    <form method="post" action="/teacher/assignment/{{ assignment.assignment_id }}/edit" class="space-y-6" id="edit-assignment-form">
+      <input type="hidden" name="class_id" id="class_id" value="{{ assignment.class_id }}">
+
+      <section class="bg-white rounded-xl shadow p-5 space-y-4">
+        <h2 class="text-lg font-bold">Thông tin bài tập</h2>
+        <div class="text-sm text-slate-600 mb-2">
+          <span class="font-semibold text-slate-800">Lớp:</span> {{ assignment.class_name }} (không đổi lớp khi sửa)
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold mb-1">Ngôn ngữ</label>
+            <select name="programming_language" class="w-full rounded-lg border-slate-300">
+              {% set pl = (assignment.programming_language or 'python')|lower %}
+              {% for opt in ['python', 'javascript', 'java', 'cpp'] %}
+              <option value="{{ opt }}" {% if pl == opt %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1">Tiêu đề</label>
+            <input type="text" name="title" required class="w-full rounded-lg border-slate-300" value="{{ assignment.title }}" placeholder="Tiêu đề bài tập">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold mb-1">Hạn nộp</label>
+            <input type="datetime-local" name="due_date" required class="w-full rounded-lg border-slate-300 max-w-md" value="{{ due_date_input }}">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1">Mô tả</label>
+          <textarea name="description" rows="4" class="w-full rounded-lg border-slate-300" placeholder="Mô tả bài tập">{{ assignment.description or '' }}</textarea>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-xl shadow p-5 space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-bold">Requirements</h2>
+          <button type="button" id="add-requirement" class="px-3 py-1.5 rounded-md bg-orange-500 text-white text-sm">Thêm requirement</button>
+        </div>
+        <div id="requirements-list" class="space-y-2">
+          {% if requirements and requirements|length > 0 %}
+            {% for r in requirements %}
+            <div class="grid grid-cols-12 gap-2 requirement-row">
+              <input name="requirement_texts" class="col-span-9 rounded-lg border-slate-300" placeholder="Nội dung requirement" value="{{ r.requirement_text }}">
+              <input name="requirement_weights" type="number" step="0.1" min="0" value="{{ r.weight }}" class="col-span-2 rounded-lg border-slate-300">
+              <button type="button" class="col-span-1 rounded-lg bg-rose-100 text-rose-700 remove-row">X</button>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="grid grid-cols-12 gap-2 requirement-row">
+              <input name="requirement_texts" class="col-span-9 rounded-lg border-slate-300" placeholder="Nội dung requirement">
+              <input name="requirement_weights" type="number" step="0.1" min="0" value="10" class="col-span-2 rounded-lg border-slate-300">
+              <button type="button" class="col-span-1 rounded-lg bg-rose-100 text-rose-700 remove-row">X</button>
+            </div>
+          {% endif %}
+        </div>
+      </section>
+
+      <section class="bg-white rounded-xl shadow p-5 space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-bold">Test cases</h2>
+          <button type="button" id="add-testcase" class="px-3 py-1.5 rounded-md bg-orange-500 text-white text-sm">Thêm testcase</button>
+        </div>
+        <div id="testcases-list" class="space-y-2">
+          <p class="text-xs text-slate-500 mb-2">Mỗi testcase cần đủ <strong>input</strong> và <strong>expected output</strong>.</p>
+          {% if testcases and testcases|length > 0 %}
+            {% for t in testcases %}
+            <div class="grid grid-cols-12 gap-2 testcase-row">
+              <input name="testcase_inputs" class="col-span-4 rounded-lg border-slate-300" placeholder="Input" value="{{ t.input_data }}">
+              <input name="testcase_outputs" class="col-span-4 rounded-lg border-slate-300" placeholder="Expected output" value="{{ t.expected_output }}">
+              <input name="testcase_weights" type="number" step="0.1" min="0" value="{{ t.score_weight }}" class="col-span-3 rounded-lg border-slate-300">
+              <button type="button" class="col-span-1 rounded-lg bg-rose-100 text-rose-700 remove-row">X</button>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="grid grid-cols-12 gap-2 testcase-row">
+              <input name="testcase_inputs" class="col-span-4 rounded-lg border-slate-300" placeholder="Input">
+              <input name="testcase_outputs" class="col-span-4 rounded-lg border-slate-300" placeholder="Expected output">
+              <input name="testcase_weights" type="number" step="0.1" min="0" value="10" class="col-span-3 rounded-lg border-slate-300">
+              <button type="button" class="col-span-1 rounded-lg bg-rose-100 text-rose-700 remove-row">X</button>
+            </div>
+          {% endif %}
+        </div>
+      </section>
+
+      <section class="bg-white rounded-xl shadow p-5 space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-bold">Sinh viên được giao</h2>
+          <label class="text-sm font-medium flex items-center gap-2">
+            <input type="checkbox" id="select-all-students">
+            Chọn tất cả trong lớp
+          </label>
+        </div>
+        <p class="text-xs text-slate-500">Bỏ chọn một phần sinh viên để chỉ giao bài cho nhóm đó.</p>
+        <div id="students-container" class="grid grid-cols-1 md:grid-cols-2 gap-2 border border-slate-200 rounded-lg p-3 max-h-64 overflow-y-auto"></div>
+      </section>
+
+      <div class="sticky bottom-0 z-30 -mx-8 mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 bg-slate-100/95 px-8 py-4 backdrop-blur supports-[backdrop-filter]:bg-slate-100/80">
+        <a href="/teacher/submissions" class="px-4 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 text-sm font-semibold">Hủy</a>
+        <button type="submit" class="px-6 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-md">Lưu thay đổi</button>
+      </div>
+    </form>
+
+    <section class="mt-8 bg-rose-50 border border-rose-200 rounded-xl p-5 max-w-xl">
+      <h2 class="text-sm font-bold text-rose-900 mb-2">Xóa bài tập</h2>
+      <p class="text-xs text-rose-800 mb-3">Thao tác không hoàn tác: toàn bộ nộp bài và kết quả chấm liên quan sẽ bị xóa theo CSDL.</p>
+      <form method="post" action="/teacher/assignment/{{ assignment.assignment_id }}/delete" onsubmit="return confirm('Xóa hẳn bài tập này và mọi bài nộp?');">
+        <button type="submit" class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold">Xóa bài tập</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const studentsByClass = {{ students_by_class_json | safe }};
+    const initialChecked = new Set({{ initial_checked_json|safe }});
+
+    const requirementsList = document.getElementById('requirements-list');
+    const testcasesList = document.getElementById('testcases-list');
+    const classField = document.getElementById('class_id');
+    const studentsContainer = document.getElementById('students-container');
+    const selectAllStudents = document.getElementById('select-all-students');
+
+    function bindRemoveButtons(scope) {
+      scope.querySelectorAll('.remove-row').forEach((btn) => {
+        btn.onclick = () => {
+          const row = btn.closest('.requirement-row, .testcase-row');
+          const list = row.parentElement;
+          const selector = row.classList.contains('testcase-row') ? '.testcase-row' : '.requirement-row';
+          const rows = list.querySelectorAll(selector);
+          if (rows.length > 1) {
+            row.remove();
+          }
+        };
+      });
+    }
+
+    document.getElementById('add-requirement').onclick = () => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'grid grid-cols-12 gap-2 requirement-row';
+      wrapper.innerHTML = `
+        <input name="requirement_texts" class="col-span-9 rounded-lg border-slate-300" placeholder="Nội dung requirement">
+        <input name="requirement_weights" type="number" step="0.1" min="0" value="10" class="col-span-2 rounded-lg border-slate-300">
+        <button type="button" class="col-span-1 rounded-lg bg-rose-100 text-rose-700 remove-row">X</button>
+      `;
+      requirementsList.appendChild(wrapper);
+      bindRemoveButtons(wrapper);
+    };
+
+    document.getElementById('add-testcase').onclick = () => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'grid grid-cols-12 gap-2 testcase-row';
+      wrapper.innerHTML = `
+        <input name="testcase_inputs" class="col-span-4 rounded-lg border-slate-300" placeholder="Input">
+        <input name="testcase_outputs" class="col-span-4 rounded-lg border-slate-300" placeholder="Expected output">
+        <input name="testcase_weights" type="number" step="0.1" min="0" value="10" class="col-span-3 rounded-lg border-slate-300">
+        <button type="button" class="col-span-1 rounded-lg bg-rose-100 text-rose-700 remove-row">X</button>
+      `;
+      testcasesList.appendChild(wrapper);
+      bindRemoveButtons(wrapper);
+    };
+
+    function renderStudentsForClass(classId) {
+      const list = studentsByClass[String(classId)] || [];
+      if (!list.length) {
+        studentsContainer.innerHTML = '<div class="text-sm text-slate-500">Lớp này chưa có sinh viên.</div>';
+        return;
+      }
+
+      studentsContainer.innerHTML = list.map((s) => {
+        const c = initialChecked.has(s.student_id) ? 'checked' : '';
+        const em = (s.email || '').replace(/</g, '&lt;');
+        const nm = String(s.full_name || '').replace(/</g, '&lt;');
+        return `
+        <label class="flex items-start gap-2 p-2 rounded-lg border border-slate-200 hover:bg-slate-50">
+          <input type="checkbox" class="student-checkbox mt-1" name="selected_students" value="${s.student_id}" ${c}>
+          <span>
+            <span class="text-sm font-medium text-slate-900">${nm}</span><br>
+            <span class="text-xs text-slate-500">${em}</span>
+          </span>
+        </label>`;
+      }).join('');
+
+      bindStudentSelectAll();
+    }
+
+    function bindStudentSelectAll() {
+      const boxes = Array.from(document.querySelectorAll('.student-checkbox'));
+      if (!boxes.length) return;
+
+      selectAllStudents.checked = boxes.every((b) => b.checked);
+
+      boxes.forEach((box) => {
+        box.onchange = () => {
+          const updated = Array.from(document.querySelectorAll('.student-checkbox'));
+          selectAllStudents.checked = updated.length > 0 && updated.every((b) => b.checked);
+        };
+      });
+    }
+
+    selectAllStudents.onchange = () => {
+      const checked = selectAllStudents.checked;
+      document.querySelectorAll('.student-checkbox').forEach((box) => {
+        box.checked = checked;
+      });
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (classField.value) {
+        renderStudentsForClass(classField.value);
+      }
+    });
+
+    bindRemoveButtons(document);
+  </script>
+</body>
+</html>

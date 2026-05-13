@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo cáo tổng hợp | Scholarly</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900">
+  {% from "partials/brand.html" import brand_block, teacher_sidebar_brand %}
+  <header class="fixed top-0 w-full z-40 bg-white/80 backdrop-blur-xl shadow-sm flex items-center justify-between px-6 py-3">
+    <div class="flex items-center gap-8">
+      {{ brand_block('/teacher-dashboard') }}
+      <div class="hidden md:flex items-center bg-slate-100 px-4 py-1.5 rounded-full border-none">
+        <span class="material-symbols-outlined text-slate-400 mr-2 text-sm">search</span>
+        <input class="bg-transparent border-none focus:ring-0 text-sm w-64 placeholder-slate-400" placeholder="Tìm trong báo cáo..." type="text"/>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      {% include "partials/teacher_header_user.html" %}
+    </div>
+  </header>
+
+  <aside class="fixed left-0 top-0 h-full w-64 z-50 bg-slate-50 border-r border-slate-200/40 flex flex-col py-6">
+    {{ teacher_sidebar_brand() }}
+    <nav class="flex-1 space-y-1">
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher-dashboard"><span class="material-symbols-outlined">dashboard</span><span>Bảng điều khiển</span></a>
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher/submissions"><span class="material-symbols-outlined">terminal</span><span>Bài kiểm tra</span></a>
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher/agents"><span class="material-symbols-outlined">smart_toy</span><span>Tác nhân AI</span></a>
+      <a class="flex items-center gap-3 py-3 text-slate-600 pl-4 text-sm hover:text-orange-600 transition-all" href="/teacher/classrooms"><span class="material-symbols-outlined">group</span><span>Lớp học</span></a>
+      <a class="flex items-center gap-3 py-3 border-l-2 border-orange-600 text-orange-600 font-semibold pl-4 text-sm bg-transparent transition-all" href="/teacher/reports"><span class="material-symbols-outlined">analytics</span><span>Báo cáo</span></a>
+    </nav>
+    <div class="px-4 mb-6"><a href="/teacher/assignment/new" class="block w-full text-center py-3 bg-orange-600 text-white rounded-xl text-sm font-bold shadow-sm hover:bg-red-600 transition-colors active:scale-95 duration-150">Tạo nhiệm vụ mới</a></div>
+  </aside>
+
+  <main class="ml-64 pt-24 px-8 pb-12">
+    <div class="flex items-end justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-extrabold">Báo cáo Tổng hợp</h1>
+        <p class="text-sm text-slate-600 mt-1">Phân tích xu hướng điểm số, lỗi phổ biến và danh sách sinh viên nổi bật.</p>
+      </div>
+      <span class="text-sm text-slate-500">Ngày: {{ today }}</span>
+    </div>
+
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-white rounded-xl shadow p-5 border border-slate-100">
+        <p class="text-xs uppercase tracking-wide text-slate-500">Tổng lượt chấm</p>
+        <p class="text-3xl font-bold text-orange-600 mt-2">{{ stats.total_evaluations }}</p>
+      </div>
+      <div class="bg-white rounded-xl shadow p-5 border border-slate-100">
+        <p class="text-xs uppercase tracking-wide text-slate-500">Điểm trung bình</p>
+        <p class="text-3xl font-bold text-slate-900 mt-2">{{ stats.avg_score }}</p>
+      </div>
+      <div class="bg-white rounded-xl shadow p-5 border border-slate-100">
+        <p class="text-xs uppercase tracking-wide text-slate-500">Xuất sắc (>= 90)</p>
+        <p class="text-3xl font-bold text-emerald-600 mt-2">{{ stats.excellent_count }}</p>
+      </div>
+      <div class="bg-white rounded-xl shadow p-5 border border-slate-100">
+        <p class="text-xs uppercase tracking-wide text-slate-500">Cần hỗ trợ (< 50)</p>
+        <p class="text-3xl font-bold text-rose-600 mt-2">{{ stats.at_risk_count }}</p>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+      <div class="lg:col-span-2 bg-white rounded-xl shadow p-5 border border-slate-100">
+        <h2 class="text-lg font-bold mb-4">Xu hướng điểm trung bình theo tháng</h2>
+        <canvas id="trendChart" height="120"></canvas>
+      </div>
+      <div class="bg-white rounded-xl shadow p-5 border border-slate-100">
+        <h2 class="text-lg font-bold mb-4">Lỗi phổ biến</h2>
+        <canvas id="errorChart" height="120"></canvas>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-xl shadow overflow-hidden border border-slate-100">
+      <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+        <h2 class="text-lg font-bold">Sinh viên có thành tích xuất sắc</h2>
+        <span class="text-xs text-slate-500">Top theo điểm trung bình</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50">
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Sinh viên</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Điểm TB</th>
+              <th class="px-4 py-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">Số bài đã chấm</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {% if top_students and top_students|length > 0 %}
+              {% for st in top_students %}
+              <tr class="hover:bg-slate-50">
+                <td class="px-4 py-3 text-sm font-semibold text-slate-900">{{ st.name }}</td>
+                <td class="px-4 py-3 text-sm font-bold {% if st.avg_score >= 90 %}text-emerald-700{% elif st.avg_score >= 70 %}text-orange-600{% else %}text-amber-700{% endif %}">{{ st.avg_score }}</td>
+                <td class="px-4 py-3 text-sm text-slate-700">{{ st.submission_count }}</td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr><td colspan="3" class="px-4 py-5 text-center text-slate-500">Chưa có dữ liệu báo cáo.</td></tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const trendLabels = {{ trend_labels_json | safe }};
+    const trendValues = {{ trend_values_json | safe }};
+    const errorLabels = [{% for e in common_errors %}'{{ e.name }}'{% if not loop.last %}, {% endif %}{% endfor %}];
+    const errorValues = [{% for e in common_errors %}{{ e.count }}{% if not loop.last %}, {% endif %}{% endfor %}];
+
+    new Chart(document.getElementById('trendChart'), {
+      type: 'line',
+      data: {
+        labels: trendLabels,
+        datasets: [{
+          label: 'Điểm trung bình',
+          data: trendValues,
+          borderColor: '#ea580c',
+          backgroundColor: 'rgba(234,88,12,0.18)',
+          tension: 0.35,
+          fill: true,
+          pointRadius: 3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, max: 100, ticks: { stepSize: 20 } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('errorChart'), {
+      type: 'bar',
+      data: {
+        labels: errorLabels,
+        datasets: [{
+          label: 'Số lần',
+          data: errorValues,
+          backgroundColor: ['#dc2626', '#f97316', '#fb923c', '#ea580c', '#78716c']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  </script>
+</body>
+</html>

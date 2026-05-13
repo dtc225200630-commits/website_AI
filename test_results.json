@@ -1,0 +1,155 @@
+{
+  "syntax": {
+    "success": true,
+    "score": 20,
+    "error": null,
+    "details": [
+      "✓ Valid Python syntax (AST parse passed)",
+      "✓ Code executes without runtime errors",
+      "✓ Syntax validation: PASS"
+    ]
+  },
+  "code_analysis": {
+    "score": 9,
+    "issues": [
+      "✗ 2 single-letter variables found",
+      "✗ No classes defined - consider OOP design for complex code",
+      "✗ No imports - likely missing required libraries",
+      "◐ Code is somewhat short (18 lines)"
+    ],
+    "strengths": [
+      "✓ Code is modularized into 2 function(s)",
+      "✓ Well documented (2/2 with docstrings)"
+    ],
+    "summary": "Code analysis score: 9/20 - Code needs improvement",
+    "details": {
+      "naming_conventions": 1,
+      "modularity": 2,
+      "documentation": 4,
+      "imports": 0,
+      "complexity": 1
+    },
+    "metrics": {
+      "function_count": 2,
+      "class_count": 0,
+      "import_count": 0,
+      "docstring_count": 2,
+      "variable_count": 4
+    }
+  },
+  "requirement": {
+    "score": 20,
+    "fulfilled": 4,
+    "total": 4,
+    "details": [
+      "Requirements Check: 4/4 met (100%)",
+      "Score: 20/20",
+      "  'Must use input() function': MET",
+      "  'Must define functions': MET",
+      "  'Must use print statement': MET",
+      "  'Must have docstrings': MET",
+      "Met (4): Must use input() function, Must define functions, Must use print statement"
+    ],
+    "requirements_met": [
+      "Must use input() function",
+      "Must define functions",
+      "Must use print statement",
+      "Must have docstrings"
+    ],
+    "requirements_missing": [],
+    "summary": "Requirement verification: 4/4 requirements met. Score: 20/20"
+  },
+  "structure": {
+    "score": 13,
+    "details": [
+      "◐ 2 functions - Decent modularization",
+      "Functions: 2 (+3 pts)",
+      "No classes - Not using OOP",
+      "Classes: 0 (+0 pts)",
+      "◐ 2 docstrings - Good documentation",
+      "Docstrings: 2 (+3 pts)",
+      "✓ Good naming conventions (23 well-named identifiers)",
+      "Naming: +4 pts",
+      "No imports - Uses only built-in functions",
+      "Complexity: +3 pts"
+    ],
+    "issues": [],
+    "strengths": [
+      "Sufficient complexity (22 lines)"
+    ],
+    "metrics": {
+      "functions": 2,
+      "classes": 0,
+      "docstrings": 2,
+      "naming": "good",
+      "imports": 0,
+      "lines": 22
+    },
+    "summary": "Structure score: 13/20 - 1 strengths, 0 issues"
+  },
+  "test": {
+    "score": 20,
+    "details": [
+      "✓ Test 1 PASS: Input='5\n3' → 'Addition: 8.0\nMultiplication: 15.0'",
+      "✓ Test 2 PASS: Input='4\n5' → 'Addition: 9.0\nMultiplication: 20.0'"
+    ],
+    "passed_count": 2.0,
+    "total_tests": 2,
+    "test_results": [
+      {
+        "test_no": 1,
+        "status": "PASS",
+        "input": "5\n3",
+        "expected": "8",
+        "actual": "Addition: 8.0\nMultiplication: 15.0",
+        "weight": 1.0
+      },
+      {
+        "test_no": 2,
+        "status": "PASS",
+        "input": "4\n5",
+        "expected": "20",
+        "actual": "Addition: 9.0\nMultiplication: 20.0",
+        "weight": 1.0
+      }
+    ],
+    "pass_rate": "100.0%",
+    "summary": "Passed 2.0/2 tests (100.0%)"
+  },
+  "llm": {
+    "score": 19,
+    "feedback": "Score: 19/20\n\nFeedback:\n- **Logic đúng (5/5):** Logic của chương trình hoàn toàn chính xác cho chức năng tính tổng và nhân hai số. Chương trình xử lý trường hợp nhập liệu không hợp lệ (không phải số) bằng cách sử dụng `try-except` để báo lỗi, điều này là rất tốt. Tuy nhiên, nó không xử lý các trường hợp \"edge cases\" khác như tràn số hoặc các giá trị đặc biệt của số thực (ví dụ: NaN, Infinity) có thể ảnh hưởng đến phép toán, dù đây là một yêu cầu nâng cao hơn.\n\n- **Code sạch (4/5):** Code khá sạch sẽ, không có code dư thừa. Tuy nhiên, có một điểm nhỏ là việc nhập liệu được thực hiện trực tiếp trong khối `try-except` mà không có một hàm riêng cho việc này. Điều này làm cho code có thể trở nên dài hơn nếu có thêm các phép toán khác.\n\n- **Dễ đọc (5/5):** Code rất dễ đọc. Việc sử dụng các hàm riêng biệt cho từng phép toán (`add`, `multiply`) và việc đặt tên hàm rõ ràng giúp người đọc hiểu ngay mục đích của từng phần. Định dạng, khoảng trắng và cấu trúc logic đều tuân thủ các quy tắc thông thường, làm cho code trở nên mạch lạc.\n\n- **Đặt tên biến (3/3):** Tên biến được đặt rất tốt và có ý nghĩa. `a`, `b` trong các hàm là quy ước chung cho các tham số số học. `x`, `y` cho biến người dùng nhập vào, và `result_add`, `result_mult` mô tả rõ ràng kết quả của từng phép tính.\n\n- **Best practices (2/2):** Chương trình tuân thủ tốt các best practices. Việc sử dụng `try-except` để xử lý `ValueError` khi chuyển đổi input là một điểm cộng lớn về việc xử lý ngoại lệ. Docstrings cho hàm và module được sử dụng đầy đủ, giúp giải thích mục đích của code. Cấu trúc module và hàm rõ ràng, dễ bảo trì.",
+    "details": [
+      "AI Review: 19/20",
+      "Gemini-based code analysis completed"
+    ]
+  },
+  "total": {
+    "total_score": 92,
+    "grade": "A (Xuat sac)",
+    "breakdown": {
+      "syntax_score": 20,
+      "code_analysis_score": 9,
+      "requirement_score": 20,
+      "structure_score": 13,
+      "test_score": 20,
+      "llm_score": 19,
+      "core_agents_sum": 92,
+      "core_agents_average": 18.4,
+      "final_score": 92
+    },
+    "details": [
+      "Syntax Check: 20/20",
+      "Code Analysis: 9/20 (diagnostic)",
+      "Requirements: 20/20",
+      "Structure Quality: 13/20",
+      "Test Cases: 20/20",
+      "AI Review (LLM): 19/20",
+      "",
+      "Core Agents Sum: 92/100",
+      "Core Agents Average: 18.4/20",
+      "Final Score: 92/100",
+      "Grade: A (Xuat sac)"
+    ]
+  }
+}

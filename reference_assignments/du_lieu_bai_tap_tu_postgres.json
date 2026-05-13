@@ -1,0 +1,858 @@
+{
+  "meta": {
+    "nguon_du_lieu": "postgresql",
+    "tao_luc": "2026-05-13T17:10:25.145382+00:00"
+  },
+  "quy_trinh_cham_bai": {
+    "tong_diem_hien_thi": "100 điểm = Cú pháp (20) + Phân tích (20) + Yêu cầu (20) + Cấu trúc (20) + Test (20). Điểm LLM chỉ nhận xét, không cộng vào tổng.",
+    "thu_tu_agent": [
+      "SyntaxAgent — ast.parse + chạy thử Python (stdin probe) hoặc biên dịch C++",
+      "CodeAnalysisAgent — AST tĩnh: đặt tên, modular, import, độ phức tạp",
+      "RequirementAgent — so khớp yêu cầu (LLM tùy chọn + fallback)",
+      "StructureAgent — cấu trúc hàm/lớp/import (Python AST hoặc regex C++)",
+      "TestAgent — chạy từng testcase, so stdout với expected_output",
+      "LLMAgent — nhận xét bổ sung",
+      "AggregationAgent — gộp điểm các nhánh"
+    ],
+    "ghi_chu": "Đáp án trong dap_an_dat_100_diem.py đảm bảo PASS toàn bộ testcase trong snapshot; điểm tối đa 100 phụ thuộc thêm agent phân tích/cấu trúc/yêu cầu."
+  },
+  "assignments": [
+    {
+      "assignment_id": 5,
+      "class_id": 1,
+      "title": "Kiểm tra số nguyên tố",
+      "description": "Nhập một số n, kiểm tra n có phải số nguyên tố không. In \"Yes\" nếu là nguyên tố, \"No\" nếu không",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Code phải có hàm kiểm tra nguyên tố",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Input là số nguyên từ stdin",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output \"Yes\" hoặc \"No\" đúng theo logic",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Xử lý edge case: n <= 1",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "7",
+          "expected_output": "Yes",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "4",
+          "expected_output": "No",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "2",
+          "expected_output": "Yes",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 6,
+      "class_id": 1,
+      "title": "Tính giai thừa",
+      "description": "Nhập số n, tính n! (giai thừa) và in kết quả",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Phải dùng vòng lặp hoặc đệ quy tính giai thừa",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Input là số nguyên dương",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output là kết quả giai thừa",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Xử lý n = 0 (kết quả = 1)",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "5",
+          "expected_output": "120",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "3",
+          "expected_output": "6",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "0",
+          "expected_output": "1",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 7,
+      "class_id": 1,
+      "title": "Đảo ngược chuỗi",
+      "description": "Nhập một chuỗi ký tự, in chuỗi đó theo thứ tự ngược",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Code phải đảo ngược chuỗi đầu vào",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Input từ stdin",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output chuỗi đảo ngược",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Không dùng thư viện reverse có sẵn",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "hello",
+          "expected_output": "olleh",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "abc",
+          "expected_output": "cba",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "Python",
+          "expected_output": "nohtyP",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 8,
+      "class_id": 1,
+      "title": "Tìm số lớn nhất",
+      "description": "Nhập n số, tìm và in số lớn nhất trong danh sách",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Phải dùng vòng lặp so sánh",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Input: số lượng n, rồi n số",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output là số lớn nhất",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Code phải hiệu quả O(n)",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "3\\n5\\n2\\n8",
+          "expected_output": "8",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "4\\n10\\n20\\n5\\n15",
+          "expected_output": "20",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "2\\n100\\n50",
+          "expected_output": "100",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 9,
+      "class_id": 1,
+      "title": "Kiểm tra Palindrome",
+      "description": "Kiểm tra xem chuỗi có phải Palindrome (đối xứng) không. In \"Yes\" hoặc \"No\"",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Phải so sánh chuỗi với chuỗi đảo ngược",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Input từ stdin",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output \"Yes\" hoặc \"No\"",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Xử lý cả chữ hoa lẫn thường",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "racecar",
+          "expected_output": "Yes",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "hello",
+          "expected_output": "No",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "A",
+          "expected_output": "Yes",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 10,
+      "class_id": 1,
+      "title": "Sắp xếp dãy số",
+      "description": "Nhập n số, sắp xếp theo thứ tự tăng dần và in kết quả",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Phải cài đặt thuật toán sắp xếp",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Input: số lượng n, rồi n số",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: dãy số sắp xếp tăng dần",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Xử lý đúng với số âm và số 0",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "4\\n3\\n1\\n4\\n2",
+          "expected_output": "1 2 3 4",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "3\\n5\\n2\\n8",
+          "expected_output": "2 5 8",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "5\\n-3\\n0\\n5\\n-1\\n2",
+          "expected_output": "-3 -1 0 2 5",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 11,
+      "class_id": 2,
+      "title": "Đếm số lớn hơn trung bình cộng",
+      "description": "Nhập n số, tính trung bình cộng và đếm bao nhiêu số lớn hơn giá trị trung bình",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Phải tự tính trung bình cộng",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Input: số lượng n, rồi n số",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: số lượng phần tử lớn hơn trung bình",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Xử lý được số âm và số thực",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "5\n1\n2\n3\n4\n5",
+          "expected_output": "2",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "4\n10\n10\n10\n10",
+          "expected_output": "0",
+          "score_weight": 5.0
+        },
+        {
+          "input_data": "5\n-2\n0\n4\n6\n2",
+          "expected_output": "2",
+          "score_weight": 5.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 12,
+      "class_id": 3,
+      "title": "Khoảng cách lớn nhất giữa hai số liên tiếp",
+      "description": "Nhập n số, tìm giá trị lớn nhất của |a[i] - a[i-1]|",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Duyệt qua các cặp phần tử liên tiếp",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Input: số lượng n, rồi n số",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: giá trị khoảng cách lớn nhất",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Sử dụng trị tuyệt đối",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "5\\n1\\n4\\n2\\n10\\n7",
+          "expected_output": "8",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "3\\n5\\n5\\n5",
+          "expected_output": "0",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "4\\n-3\\n2\\n-4\\n1",
+          "expected_output": "6",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 13,
+      "class_id": 3,
+      "title": "Kiểm tra dãy xen kẽ chẵn lẻ",
+      "description": "Nhập n số nguyên, kiểm tra xem các số có xen kẽ chẵn lẻ hay không",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Kiểm tra từng cặp phần tử liên tiếp",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Input: số lượng n, rồi n số nguyên",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: Yes hoặc No",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Không dùng thư viện hỗ trợ",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "5\\n1\\n2\\n3\\n4\\n5",
+          "expected_output": "Yes",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "4\\n2\\n4\\n5\\n7",
+          "expected_output": "No",
+          "score_weight": 5.0
+        },
+        {
+          "input_data": "3\\n8\\n1\\n6",
+          "expected_output": "Yes",
+          "score_weight": 5.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 14,
+      "class_id": 2,
+      "title": "Số có tổng chữ số lớn nhất",
+      "description": "Nhập n số nguyên dương, tìm số có tổng các chữ số lớn nhất. Nếu có nhiều số, lấy số xuất hiện đầu tiên",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Viết hàm tính tổng chữ số",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Input: số lượng n, rồi n số nguyên dương",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: số có tổng chữ số lớn nhất",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Giữ số đầu tiên nếu bằng nhau",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "4\\n12\\n99\\n123\\n45",
+          "expected_output": "99",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "3\\n100\\n28\\n37",
+          "expected_output": "28",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "3\\n111\\n30\\n21",
+          "expected_output": "111",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 15,
+      "class_id": 3,
+      "title": "Đếm cặp có tổng chia hết cho 3",
+      "description": "Nhập n số nguyên, đếm số cặp (i, j) với i < j sao cho tổng của hai số chia hết cho 3",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Duyệt tất cả các cặp i < j",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Input: số lượng n, rồi n số nguyên",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: số lượng cặp thỏa mãn",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Xử lý được số âm",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "4\\n1\\n2\\n3\\n4",
+          "expected_output": "2",
+          "score_weight": 5.0
+        },
+        {
+          "input_data": "3\\n3\\n6\\n9",
+          "expected_output": "3",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "5\\n-1\\n1\\n2\\n4\\n5",
+          "expected_output": "4",
+          "score_weight": 5.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 16,
+      "class_id": 4,
+      "title": "Độ dài đoạn tăng liên tiếp dài nhất",
+      "description": "Nhập n số, tìm độ dài lớn nhất của đoạn các số tăng liên tiếp",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Duyệt một lần qua dãy",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Input: số lượng n, rồi n số",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: độ dài lớn nhất",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Tăng liên tiếp nghĩa là a[i] > a[i-1]",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "7\\n1\\n2\\n3\\n2\\n4\\n5\\n6",
+          "expected_output": "4",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "5\\n5\\n4\\n3\\n2\\n1",
+          "expected_output": "1",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "6\\n1\\n3\\n5\\n7\\n2\\n4",
+          "expected_output": "4",
+          "score_weight": 5.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 17,
+      "class_id": 1,
+      "title": "Tính diện tích hình tròn",
+      "description": "Nhập bán kính r và tính diện tích S = 3.14 * r * r",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Có dùng input()",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Có ép kiểu float",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Áp dụng công thức S = 3.14 * r * r",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Có print() kết quả",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "5\n",
+          "expected_output": "78.5",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "2\n",
+          "expected_output": "12.56",
+          "score_weight": 5.0
+        },
+        {
+          "input_data": "10\n",
+          "expected_output": "314.0",
+          "score_weight": 5.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 18,
+      "class_id": 1,
+      "title": "Kiểm tra số chẵn lẻ",
+      "description": "Nhập một số nguyên n, in ra \"Chan\" hoặc \"Le\"",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [],
+      "testcases": []
+    },
+    {
+      "assignment_id": 19,
+      "class_id": 1,
+      "title": "Vòng lặp in dãy số",
+      "description": "Nhập n, in các số từ 1 đến n bằng vòng lặp for",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [],
+      "testcases": []
+    },
+    {
+      "assignment_id": 20,
+      "class_id": 5,
+      "title": "Ma trận con 2x2 lớn nhất",
+      "description": "Nhập ma trận m x n, tìm tổng lớn nhất của một ma trận con kích thước 2x2",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Input: m, n rồi m*n số",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Duyệt tất cả ma trận con 2x2",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: tổng lớn nhất",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Xử lý được số âm",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "3\\n3\\n1\\n2\\n3\\n4\\n5\\n6\\n7\\n8\\n9",
+          "expected_output": "28",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "2\\n2\\n-1\\n-2\\n-3\\n-4",
+          "expected_output": "-10",
+          "score_weight": 5.0
+        },
+        {
+          "input_data": "3\\n4\\n1\\n1\\n1\\n1\\n2\\n2\\n2\\n2\\n3\\n3\\n3\\n3",
+          "expected_output": "10",
+          "score_weight": 5.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 21,
+      "class_id": 3,
+      "title": "Đếm hình chữ nhật toàn số 1",
+      "description": "Nhập ma trận nhị phân, đếm số hình chữ nhật chỉ chứa toàn số 1",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Input: m, n rồi m*n số 0 hoặc 1",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Đếm mọi hình chữ nhật hợp lệ",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: số lượng hình chữ nhật",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Không dùng thư viện ngoài",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "2\\n2\\n1\\n1\\n1\\n1",
+          "expected_output": "9",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "2\\n3\\n1\\n0\\n1\\n1\\n1\\n1",
+          "expected_output": "12",
+          "score_weight": 5.0
+        },
+        {
+          "input_data": "2\\n2\\n0\\n0\\n0\\n0",
+          "expected_output": "0",
+          "score_weight": 5.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 22,
+      "class_id": 4,
+      "title": "Dãy con có tổng gần 0 nhất",
+      "description": "Nhập n số nguyên, tìm tổng của dãy con liên tiếp có giá trị tuyệt đối nhỏ nhất",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Xét các dãy con liên tiếp",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: tổng gần 0 nhất",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Nếu có tổng bằng 0 thì ưu tiên 0",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Xử lý số âm",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "5\\n2\\n-3\\n1\\n4\\n-2",
+          "expected_output": "0",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "3\\n5\\n7\\n9",
+          "expected_output": "5",
+          "score_weight": 5.0
+        },
+        {
+          "input_data": "4\\n-8\\n3\\n2\\n10",
+          "expected_output": "2",
+          "score_weight": 5.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 23,
+      "class_id": 4,
+      "title": "Đối xứng sau khi nén chuỗi",
+      "description": "Nhập một chuỗi, loại bỏ các ký tự trùng nhau liên tiếp, kiểm tra chuỗi thu được có đối xứng hay không",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Phải thực hiện bước nén chuỗi",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Kiểm tra palindrome",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: Yes hoặc No",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Phân biệt chữ hoa chữ thường",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "aaabccbaaa",
+          "expected_output": "Yes",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "abcccdd",
+          "expected_output": "No",
+          "score_weight": 5.0
+        },
+        {
+          "input_data": "aabbccbbaa",
+          "expected_output": "Yes",
+          "score_weight": 5.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 24,
+      "class_id": 4,
+      "title": "Số bước tăng tối thiểu",
+      "description": "Nhập n số nguyên. Mỗi bước được tăng một phần tử lên 1 đơn vị. Tìm số bước tối thiểu để dãy trở thành tăng nghiêm ngặt",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Duyệt từ trái sang phải",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Tính tổng số bước tăng",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: số bước tối thiểu",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Xử lý được số âm",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "5\\n1\\n1\\n1\\n1\\n1",
+          "expected_output": "10",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "4\\n3\\n2\\n5\\n1",
+          "expected_output": "9",
+          "score_weight": 5.0
+        },
+        {
+          "input_data": "3\\n-1\\n-1\\n-1",
+          "expected_output": "3",
+          "score_weight": 5.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 25,
+      "class_id": 4,
+      "title": "Chia dãy tối ưu",
+      "description": "Nhập n số nguyên dương, chia thành hai nhóm sao cho hiệu tổng hai nhóm là nhỏ nhất. In ra giá trị hiệu nhỏ nhất",
+      "due_date": "2026-12-30T23:59:00+07:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Mỗi phần tử thuộc đúng một nhóm",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Tối ưu hiệu tổng hai nhóm",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Output: hiệu nhỏ nhất",
+          "weight": 5.0
+        },
+        {
+          "requirement_text": "Giải đúng với n nhỏ (quay lui hoặc quy hoạch động)",
+          "weight": 5.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "4\\n1\\n6\\n11\\n5",
+          "expected_output": "1",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "3\\n10\\n20\\n15",
+          "expected_output": "5",
+          "score_weight": 5.0
+        },
+        {
+          "input_data": "5\\n3\\n1\\n4\\n2\\n2",
+          "expected_output": "0",
+          "score_weight": 5.0
+        }
+      ]
+    }
+  ]
+}

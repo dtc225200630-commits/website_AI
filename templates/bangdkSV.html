@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bảng điều khiển | Scholarly</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#f8f9fb",
+              "on-tertiary-container": "#ffc6b2",
+              "inverse-surface": "#2e3132",
+              "surface-container": "#edeef0",
+              "secondary": "#4c5d8d",
+              "on-surface-variant": "#434654",
+              "tertiary": "#7b2600",
+              "on-tertiary-fixed-variant": "#812800",
+              "background": "#f8f9fb",
+              "surface-container-highest": "#e1e2e4",
+              "surface-container-high": "#e7e8ea",
+              "on-secondary-container": "#415382",
+              "tertiary-fixed": "#ffdbcf",
+              "on-primary-fixed-variant": "#0040a2",
+              "on-primary": "#ffffff",
+              "secondary-fixed-dim": "#b4c5fb",
+              "surface-tint": "#0c56d0",
+              "surface-container-lowest": "#ffffff",
+              "error": "#ba1a1a",
+              "primary-fixed": "#dae2ff",
+              "primary": "#003d9b",
+              "tertiary-fixed-dim": "#ffb59b",
+              "outline": "#737685",
+              "on-primary-fixed": "#001848",
+              "on-error-container": "#93000a",
+              "surface": "#f8f9fb",
+              "on-surface": "#191c1e",
+              "on-background": "#191c1e",
+              "surface-container-low": "#f3f4f6",
+              "on-secondary-fixed": "#021945",
+              "inverse-primary": "#b2c5ff",
+              "on-secondary": "#ffffff",
+              "surface-dim": "#d9dadc",
+              "surface-variant": "#e1e2e4",
+              "error-container": "#ffdad6",
+              "outline-variant": "#c3c6d6",
+              "on-secondary-fixed-variant": "#344573",
+              "secondary-container": "#b6c8fe",
+              "on-tertiary-fixed": "#380d00",
+              "on-tertiary": "#ffffff",
+              "primary-fixed-dim": "#b2c5ff",
+              "on-primary-container": "#c4d2ff",
+              "inverse-on-surface": "#f0f1f3",
+              "tertiary-container": "#a33500",
+              "on-error": "#ffffff",
+              "secondary-fixed": "#dae2ff",
+              "primary-container": "#0052cc"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+{% from "partials/brand.html" import brand_block %}
+{% from "partials/student_subject_filter.html" import subject_filter_bar %}
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-6 h-16 bg-white dark:bg-slate-950 docked full-width z-50 shadow-sm dark:shadow-none bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4">
+{{ brand_block('/student-dashboard') }}
+</div>
+<div class="flex-1 max-w-xl mx-8 hidden md:block">
+<div class="relative flex items-center bg-surface-container-low rounded-full px-4 py-2 border-b-2 border-surface-variant focus-within:border-primary transition-all">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-sm font-label ml-2" placeholder="Tìm bài tập, môn học..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<a href="/logout" class="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-300 no-underline" title="Đăng xuất">
+<span class="material-symbols-outlined text-xl">logout</span>
+<span class="hidden sm:inline">Thoát</span>
+</a>
+<div class="flex items-center gap-3 pl-2 border-l border-slate-100 dark:border-slate-800">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold font-headline text-on-surface">{{ student_profile.full_name if student_profile else 'Sinh viên' }}</p>
+</div>
+<span class="material-symbols-outlined text-blue-700 dark:text-blue-400 text-3xl">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Side Navigation Bar -->
+{% set active_nav = 'dashboard' %}
+{% include 'partials/student_aside.html' %}
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 px-8 pb-12 min-h-screen">
+<!-- Welcome Section -->
+<header class="mb-10 flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
+<div>
+<h1 class="text-3xl font-extrabold text-on-surface font-headline tracking-tight">{{ greeting }}, {{ student_profile.full_name if student_profile else 'bạn' }}!</h1>
+<p class="text-outline mt-1 font-body">Bạn có {{ student_progress.pending_count if student_progress else 0 }} bài tập chưa nộp.</p>
+</div>
+<div class="flex gap-3">
+<a href="/student-assignments{% if selected_class_id is defined and selected_class_id is not none %}?class_id={{ selected_class_id }}{% endif %}" class="px-4 py-2 bg-primary text-on-primary font-medium rounded-lg flex items-center gap-2 hover:opacity-90 transition-opacity text-sm">
+<span class="material-symbols-outlined text-sm">assignment</span>
+<span>Xem bài cần làm</span>
+</a>
+</div>
+</header>
+<!-- Stats Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+<div class="md:col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/10">
+<div class="flex justify-between items-start mb-4">
+<span class="p-2 bg-primary-fixed text-primary rounded-lg material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grade</span>
+</div>
+<h3 class="text-sm font-medium text-outline uppercase tracking-wider">Điểm trung bình (đã chấm)</h3>
+<p class="text-4xl font-black text-on-surface mt-2 font-headline">{{ student_profile.average_score if student_profile else 0 }}<span class="text-lg font-normal text-outline">/100</span></p>
+<p class="text-[11px] text-outline mt-2">Theo các bài đã có điểm trong hệ thống.</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/10">
+<div class="flex justify-between items-start mb-4">
+<span class="p-2 bg-secondary-container text-secondary rounded-lg material-symbols-outlined">task_alt</span>
+</div>
+<h3 class="text-sm font-medium text-outline uppercase tracking-wider">Hoàn thành</h3>
+<p class="text-4xl font-black text-on-surface mt-2 font-headline">{{ student_progress.completion_percent if student_progress else 0 }}<span class="text-lg font-normal text-outline">%</span></p>
+<div class="w-full h-1 bg-surface-container-highest rounded-full mt-4 overflow-hidden">
+<div class="h-full bg-primary rounded-full shadow-[0_0_8px_rgba(0,61,155,0.4)] {% set cp = student_progress.completion_percent if student_progress else 0 %}{% if cp >= 100 %}w-full{% elif cp >= 75 %}w-3/4{% elif cp >= 50 %}w-1/2{% elif cp >= 25 %}w-1/4{% elif cp > 0 %}w-1/12{% else %}w-0{% endif %}"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/10">
+<div class="flex justify-between items-start mb-4">
+<span class="p-2 bg-tertiary-fixed text-tertiary rounded-lg material-symbols-outlined">pending_actions</span>
+</div>
+<h3 class="text-sm font-medium text-outline uppercase tracking-wider">Bài tập chưa nộp</h3>
+<p class="text-4xl font-black text-on-surface mt-2 font-headline">{{ "%02d"|format(student_progress.pending_count if student_progress else 0) }}</p>
+<p class="text-[10px] text-tertiary mt-2">Hạn chót gần nhất: {{ nearest_due_display }}</p>
+</div>
+</div>
+{{ subject_filter_bar('/student-dashboard', 'dash') }}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Active Assignments List (2/3 width) -->
+<section class="lg:col-span-2">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-xl font-bold font-headline text-on-surface flex items-center gap-2">
+<span class="w-1.5 h-6 bg-primary rounded-full"></span>
+                        Bài tập hiện tại
+                    </h2>
+<a class="text-primary text-sm font-medium hover:underline" href="/student-assignments{% if selected_class_id is defined and selected_class_id is not none %}?class_id={{ selected_class_id }}{% endif %}">Xem tất cả bài cần làm</a>
+</div>
+<div class="space-y-4">
+{% if assignments and assignments|length > 0 %}
+{% for a in assignments %}
+<!-- Assignment Item -->
+<div class="group bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10 hover:shadow-md transition-all duration-300">
+<div class="flex items-center gap-5">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">code</span>
+</div>
+<div class="flex-1">
+<h3 class="font-bold text-on-surface group-hover:text-primary transition-colors">{{ a.title }}</h3>
+<p class="text-xs text-outline mt-1 italic">{{ a.class_name }}{% if a.teacher_name %} • {{ a.teacher_name }}{% endif %}</p>
+<div class="flex items-center gap-4 mt-3">
+<div class="flex items-center gap-1.5 text-[11px] text-outline">
+<span class="material-symbols-outlined text-sm">schedule</span>
+                    Hạn chót: {{ a.due_date_display if a.due_date_display else a.due_date }}
+                  </div>
+<div class="px-2 py-0.5 rounded text-[10px] font-bold {{ a.status_badge_class }}">{{ a.status_label }}</div>
+</div>
+</div>
+<form method="get" action="/assignment/{{ a.assignment_id }}" style="display: inline;">
+<button type="submit" class="px-5 py-2.5 bg-primary text-on-primary text-xs font-bold rounded-lg hover:bg-primary-container transition-colors active:scale-95">Nộp bài</button>
+</form>
+</div>
+</div>
+{% endfor %}
+{% else %}
+<div class="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant/10">
+<p class="text-sm text-outline">Chưa có bài tập nào trong lớp của bạn.</p>
+</div>
+{% endif %}
+</div>
+</section>
+<!-- Sidebar Info (1/3 width) -->
+<aside class="space-y-8">
+<!-- Gợi ý từ dữ liệu thật -->
+<div class="relative overflow-hidden bg-gradient-to-br from-primary to-primary-container p-6 rounded-2xl text-white shadow-lg">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">tips_and_updates</span>
+<span class="text-xs font-bold uppercase tracking-widest opacity-90">Gợi ý nhanh</span>
+</div>
+<p class="text-sm leading-relaxed font-body opacity-95">
+{{ dashboard_insight if dashboard_insight else 'Theo dõi bài tập và hạn nộp trong mục Bài tập.' }}
+</p>
+</div>
+</div>
+<!-- Upcoming Deadlines -->
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/5">
+<h2 class="text-lg font-bold font-headline text-on-surface mb-6">Thời hạn sắp tới</h2>
+<div class="space-y-6">
+{% if upcoming_deadlines and upcoming_deadlines|length > 0 %}
+{% for d in upcoming_deadlines %}
+<div class="flex gap-4">
+<div class="flex flex-col items-center justify-center min-w-[48px] h-14 bg-white rounded-xl shadow-sm border border-outline-variant/10">
+<span class="text-[10px] font-bold {% if loop.first %}text-error{% else %}text-outline{% endif %} uppercase">{{ d.weekday }}</span>
+<span class="text-xl font-black text-on-surface">{{ d.day_of_month }}</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-on-surface line-clamp-1">{{ d.title }}</h4>
+<p class="text-[11px] text-outline mt-1">Hạn chót: {{ d.due_time }}</p>
+</div>
+</div>
+{% endfor %}
+{% else %}
+<p class="text-sm text-outline">Hiện chưa có thời hạn sắp tới.</p>
+{% endif %}
+</div>
+<a href="/student-assignments" class="block w-full mt-6 py-3 text-center bg-surface-container-highest text-on-surface text-xs font-bold rounded-xl hover:bg-outline-variant/20 transition-all no-underline">Mở danh sách bài tập</a>
+</div>
+<!-- Profile Activity / Latest Grade -->
+<div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 shadow-sm">
+<h2 class="text-sm font-bold font-headline text-outline uppercase tracking-wider mb-4">Điểm số mới nhất</h2>
+{% if latest_score %}
+<div class="flex items-center justify-between p-3 bg-surface rounded-lg">
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 rounded bg-primary-fixed flex items-center justify-center text-primary font-bold text-xs tracking-tighter">{{ "%.1f"|format(latest_score.score) }}</span>
+<div>
+<p class="text-xs font-bold">{{ latest_score.title }}</p>
+<p class="text-[10px] text-outline">Nộp lúc: {{ latest_score.submitted_at_display }}</p>
+</div>
+</div>
+<span class="text-sm font-bold text-primary">{{ "%.1f"|format(latest_score.score) }}/100</span>
+</div>
+{% else %}
+<div class="p-3 bg-surface rounded-lg">
+<p class="text-xs text-outline">Bạn chưa có điểm nào được chấm.</p>
+</div>
+{% endif %}
+</div>
+</aside>
+</div>
+</main>
+</body></html>

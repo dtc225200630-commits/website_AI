@@ -1,0 +1,9 @@
+fastapi==0.115.0
+uvicorn==0.30.6
+psycopg2-binary
+bcrypt
+jinja2
+python-multipart
+langchain
+google-generativeai
+python-dotenv

@@ -1,0 +1,451 @@
+{
+  "meta": {
+    "nguon_du_lieu": "snapshot_seed_sql (seed_test_data + seed_10_assignments)",
+    "tao_luc": "2026-05-13T17:10:25.144037+00:00",
+    "ghi_chu": "Nếu cần dump DB thật, xem file du_lieu_bai_tap_tu_postgres.json (khi kết nối được)."
+  },
+  "quy_trinh_cham_bai": {
+    "tong_diem_hien_thi": "100 điểm = Cú pháp (20) + Phân tích (20) + Yêu cầu (20) + Cấu trúc (20) + Test (20). Điểm LLM chỉ nhận xét, không cộng vào tổng.",
+    "thu_tu_agent": [
+      "SyntaxAgent — ast.parse + chạy thử Python (stdin probe) hoặc biên dịch C++",
+      "CodeAnalysisAgent — AST tĩnh: đặt tên, modular, import, độ phức tạp",
+      "RequirementAgent — so khớp yêu cầu (LLM tùy chọn + fallback)",
+      "StructureAgent — cấu trúc hàm/lớp/import (Python AST hoặc regex C++)",
+      "TestAgent — chạy từng testcase, so stdout với expected_output",
+      "LLMAgent — nhận xét bổ sung",
+      "AggregationAgent — gộp điểm các nhánh"
+    ],
+    "ghi_chu": "Đáp án trong dap_an_dat_100_diem.py đảm bảo PASS toàn bộ testcase trong snapshot; điểm tối đa 100 phụ thuộc thêm agent phân tích/cấu trúc/yêu cầu."
+  },
+  "assignments": [
+    {
+      "assignment_id": 1,
+      "class_id": 1,
+      "title": "Viết chương trình cộng 2 số",
+      "description": "Nhập 2 số và in ra tổng",
+      "due_date": "2026-12-30T23:59:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Có dùng input()",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có phép cộng",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có print()",
+          "weight": 10.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "2\n3\n",
+          "expected_output": "5",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "10\n20\n",
+          "expected_output": "30",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "7\n8\n",
+          "expected_output": "15",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 2,
+      "class_id": 1,
+      "title": "Viết chương trình kiểm tra số chẵn hay lẻ",
+      "description": "Nhập một số và kiểm tra xem nó là số chẵn hay số lẻ, in ra kết quả.",
+      "due_date": "2026-12-31T23:59:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Có dùng input()",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có phép chia lấy dư (%) hoặc biểu thức điều kiện",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có print() kết quả \"chẵn\" hoặc \"lẻ\"",
+          "weight": 10.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "4\n",
+          "expected_output": "chẵn",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "7\n",
+          "expected_output": "lẻ",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "0\n",
+          "expected_output": "chẵn",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 3,
+      "class_id": 1,
+      "title": "Viết chương trình tính giai thừa",
+      "description": "Nhập một số n, tính và in ra giai thừa n! (n * (n-1) * (n-2) * ... * 1).",
+      "due_date": "2027-01-05T23:59:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Có dùng input() và int()",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có sử dụng vòng lặp (for hoặc while)",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có tính toán và in ra kết quả giai thừa",
+          "weight": 10.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "5\n",
+          "expected_output": "120",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "3\n",
+          "expected_output": "6",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "0\n",
+          "expected_output": "1",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 4,
+      "class_id": 1,
+      "title": "Viết chương trình tính tổng từ 1 đến n",
+      "description": "Nhập một số n, tính tổng các số từ 1 đến n, in ra kết quả.",
+      "due_date": "2027-01-10T23:59:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Có dùng input() để nhập số n",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có sử dụng vòng lặp hoặc công thức tính tổng",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có print() kết quả tổng",
+          "weight": 10.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "5\n",
+          "expected_output": "15",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "10\n",
+          "expected_output": "55",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "1\n",
+          "expected_output": "1",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 5,
+      "class_id": 1,
+      "title": "Viết chương trình kiểm tra số nguyên tố",
+      "description": "Nhập một số, kiểm tra xem nó có phải là số nguyên tố không (chỉ chia hết cho 1 và chính nó).",
+      "due_date": "2027-01-15T23:59:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Có dùng input() để nhập số",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có vòng lặp để kiểm tra chia hết",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có print() kết quả \"là số nguyên tố\" hoặc \"không là số nguyên tố\"",
+          "weight": 10.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "7\n",
+          "expected_output": "là số nguyên tố",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "4\n",
+          "expected_output": "không là số nguyên tố",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "2\n",
+          "expected_output": "là số nguyên tố",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 6,
+      "class_id": 1,
+      "title": "Viết chương trình đảo ngược chuỗi",
+      "description": "Nhập một chuỗi ký tự, in ra chuỗi đó nhưng theo thứ tự đảo ngược.",
+      "due_date": "2027-01-20T23:59:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Có dùng input() để nhập chuỗi",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có cách đảo ngược chuỗi (slicing hoặc vòng lặp)",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có print() chuỗi đảo ngược",
+          "weight": 10.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "hello\n",
+          "expected_output": "olleh",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "Python\n",
+          "expected_output": "nohtyP",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "abc\n",
+          "expected_output": "cba",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 7,
+      "class_id": 1,
+      "title": "Viết chương trình tính trung bình cộng",
+      "description": "Nhập 3 số, tính trung bình cộng của 3 số đó và in ra kết quả (làm tròn 2 chữ số thập phân).",
+      "due_date": "2027-01-25T23:59:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Có dùng input() để nhập 3 số",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có tính tổng 3 số rồi chia cho 3",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có print() kết quả trung bình cộng (làm tròn)",
+          "weight": 10.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "5\n10\n15\n",
+          "expected_output": "10.00",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "7\n8\n9\n",
+          "expected_output": "8.00",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "3\n6\n9\n",
+          "expected_output": "6.00",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 8,
+      "class_id": 1,
+      "title": "Viết chương trình chuyển đổi nhiệt độ Celsius sang Fahrenheit",
+      "description": "Nhập nhiệt độ Celsius, chuyển sang Fahrenheit theo công thức: F = (C * 9/5) + 32, in ra kết quả.",
+      "due_date": "2027-02-01T23:59:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Có dùng input() để nhập độ Celsius",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có công thức chuyển đổi đúng: F = (C * 9/5) + 32",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có print() kết quả nhiệt độ Fahrenheit",
+          "weight": 10.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "0\n",
+          "expected_output": "32.0",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "100\n",
+          "expected_output": "212.0",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "25\n",
+          "expected_output": "77.0",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 9,
+      "class_id": 1,
+      "title": "Viết chương trình phân loại điểm số",
+      "description": "Nhập điểm số (0-10), phân loại thành: Xuất sắc (9-10), Tốt (7-8), Khá (5-6), Yếu (<5), in ra kết quả.",
+      "due_date": "2027-02-05T23:59:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Có dùng input() để nhập điểm số",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có sử dụng if-elif-else hoặc cấu trúc điều kiện",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có print() kết quả phân loại đúng theo khoảng điểm",
+          "weight": 10.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "9\n",
+          "expected_output": "Xuất sắc",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "7\n",
+          "expected_output": "Tốt",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "4\n",
+          "expected_output": "Yếu",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 10,
+      "class_id": 1,
+      "title": "Viết chương trình máy tính đơn giản",
+      "description": "Nhập 2 số và một phép toán (+, -, *, /), in ra kết quả của phép toán đó.",
+      "due_date": "2027-02-10T23:59:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Có dùng input() để nhập 2 số và phép toán",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có sử dụng if-elif hoặc cấu trúc xử lý phép toán",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có print() kết quả phép toán",
+          "weight": 10.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "10\n5\n+\n",
+          "expected_output": "15",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "10\n5\n-\n",
+          "expected_output": "5",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "10\n5\n*\n",
+          "expected_output": "50",
+          "score_weight": 10.0
+        }
+      ]
+    },
+    {
+      "assignment_id": 11,
+      "class_id": 1,
+      "title": "Viết chương trình đếm số ký tự trong chuỗi",
+      "description": "Nhập một chuỗi, đếm số lượng ký tự (không tính khoảng trắng) và in ra kết quả.",
+      "due_date": "2027-02-15T23:59:00",
+      "programming_language": "Python",
+      "requirements": [
+        {
+          "requirement_text": "Có dùng input() để nhập chuỗi",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có hàm len() hoặc vòng lặp để đếm ký tự",
+          "weight": 10.0
+        },
+        {
+          "requirement_text": "Có print() số lượng ký tự (loại bỏ khoảng trắng)",
+          "weight": 10.0
+        }
+      ],
+      "testcases": [
+        {
+          "input_data": "hello world\n",
+          "expected_output": "10",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "python\n",
+          "expected_output": "6",
+          "score_weight": 10.0
+        },
+        {
+          "input_data": "a b c\n",
+          "expected_output": "3",
+          "score_weight": 10.0
+        }
+      ]
+    }
+  ]
+}

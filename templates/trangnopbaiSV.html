@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nộp bài tập | Scholarly</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#f8f9fb",
+              "on-tertiary-container": "#ffc6b2",
+              "inverse-surface": "#2e3132",
+              "surface-container": "#edeef0",
+              "secondary": "#4c5d8d",
+              "on-surface-variant": "#434654",
+              "tertiary": "#7b2600",
+              "on-tertiary-fixed-variant": "#812800",
+              "background": "#f8f9fb",
+              "surface-container-highest": "#e1e2e4",
+              "surface-container-high": "#e7e8ea",
+              "on-secondary-container": "#415382",
+              "tertiary-fixed": "#ffdbcf",
+              "on-primary-fixed-variant": "#0040a2",
+              "on-primary": "#ffffff",
+              "secondary-fixed-dim": "#b4c5fb",
+              "surface-tint": "#0c56d0",
+              "surface-container-lowest": "#ffffff",
+              "error": "#ba1a1a",
+              "primary-fixed": "#dae2ff",
+              "primary": "#003d9b",
+              "tertiary-fixed-dim": "#ffb59b",
+              "outline": "#737685",
+              "on-primary-fixed": "#001848",
+              "on-error-container": "#93000a",
+              "surface": "#f8f9fb",
+              "on-surface": "#191c1e",
+              "on-background": "#191c1e",
+              "surface-container-low": "#f3f4f6",
+              "on-secondary-fixed": "#021945",
+              "inverse-primary": "#b2c5ff",
+              "on-secondary": "#ffffff",
+              "surface-dim": "#d9dadc",
+              "surface-variant": "#e1e2e4",
+              "error-container": "#ffdad6",
+              "outline-variant": "#c3c6d6",
+              "on-secondary-fixed-variant": "#344573",
+              "secondary-container": "#b6c8fe",
+              "on-tertiary-fixed": "#380d00",
+              "on-tertiary": "#ffffff",
+              "primary-fixed-dim": "#b2c5ff",
+              "on-primary-container": "#c4d2ff",
+              "inverse-on-surface": "#f0f1f3",
+              "tertiary-container": "#a33500",
+              "on-error": "#ffffff",
+              "secondary-fixed": "#dae2ff",
+              "primary-container": "#0052cc"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+{% from "partials/brand.html" import brand_block, sidebar_heading %}
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-6 h-16 bg-white dark:bg-slate-950 shadow-sm dark:shadow-none z-50 border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4">
+{{ brand_block('/student-dashboard') }}
+</div>
+<div class="flex items-center gap-4">
+<div class="relative flex items-center bg-surface-container-low rounded-full px-4 py-1.5 transition-all focus-within:ring-2 focus-within:ring-primary/20">
+<span class="material-symbols-outlined text-outline text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm font-label w-48 lg:w-64" placeholder="Tìm bài tập..." type="text"/>
+</div>
+<button class="p-1 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors active:scale-95 duration-150 border-2 border-transparent hover:border-blue-100">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400 text-3xl" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full w-64 py-8 flex flex-col gap-6 z-40 bg-slate-50 dark:bg-slate-900 mt-16 border-r border-slate-200/80 dark:border-slate-800">
+{{ sidebar_heading('Cổng sinh viên') }}
+
+<!-- Profile Section -->
+<div class="px-6 pb-4 border-b border-slate-200 dark:border-slate-700">
+  <div class="flex items-center gap-3 mb-3">
+    <div class="w-10 h-10 rounded-full bg-blue-200 dark:bg-blue-900 flex items-center justify-center text-blue-700 dark:text-blue-300 font-bold">
+      {{ student_profile.full_name[0] if student_profile.full_name else 'S' }}
+    </div>
+    <div class="flex-1 min-w-0">
+      <p class="text-xs font-bold truncate dark:text-slate-200">{{ student_profile.full_name if student_profile else 'Sinh viên' }}</p>
+      <p class="text-[10px] text-slate-500 dark:text-slate-400">{{ student_profile.student_code if student_profile else '--' }}</p>
+    </div>
+  </div>
+  <div class="space-y-2 text-[10px] dark:text-slate-300">
+    <div class="flex justify-between">
+      <span class="text-slate-600 dark:text-slate-400">Lớp:</span>
+      <span class="font-medium">{{ student_profile.class_name if student_profile else 'N/A' }}</span>
+    </div>
+    <div class="flex justify-between">
+      <span class="text-slate-600 dark:text-slate-400">GV hướng dẫn:</span>
+      <span class="font-medium">{{ student_profile.teacher_name if student_profile else '--' }}</span>
+    </div>
+  </div>
+</div>
+
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 pl-4 hover:text-blue-600 dark:hover:text-blue-300 transition-all active:translate-x-1 duration-200 py-3" href="/student-dashboard">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label text-sm">Bảng điều khiển</span>
+</a>
+<a class="flex items-center gap-3 text-blue-700 dark:text-blue-400 font-medium border-l-2 border-blue-700 dark:border-blue-400 pl-4 hover:text-blue-600 transition-all active:translate-x-1 duration-200 py-3" href="/student-assignments">
+<span class="material-symbols-outlined" data-icon="code">code</span>
+<span class="font-label text-sm">Bài tập</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 pl-4 hover:text-blue-600 dark:hover:text-blue-300 transition-all active:translate-x-1 duration-200 py-3" href="/student-results">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-label text-sm">Kết quả</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 pl-4 hover:text-blue-600 dark:hover:text-blue-300 transition-all active:translate-x-1 duration-200 py-3" href="/student-submission-history">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label text-sm">Lịch sử</span>
+</a>
+<div class="mt-auto pb-20">
+<a class="flex items-center gap-3 text-slate-500 dark:text-slate-400 pl-4 hover:text-blue-600 dark:hover:text-blue-300 transition-all active:translate-x-1 duration-200 py-3" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label text-sm">Cài đặt</span>
+</a>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-8 min-h-screen">
+<div class="max-w-5xl mx-auto">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+<div>
+<nav class="flex text-xs text-outline mb-2 gap-2 font-label uppercase tracking-wider">
+<span>Khóa học</span>
+<span>/</span>
+<span>CS101</span>
+<span>/</span>
+<span class="text-primary font-bold">Nộp bài tập</span>
+</nav>
+<h1 class="text-3xl font-extrabold text-on-surface font-headline tracking-tight">Cấu trúc dữ liệu &amp; Giải thuật</h1>
+<p class="text-on-surface-variant mt-1">Bài tập số 4: Triển khai Cây Nhị phân Tìm kiếm</p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="bg-primary-container/20 text-primary px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                        ĐANG MỞ
+                    </div>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Submission Form Column -->
+<div class="lg:col-span-2 space-y-6">
+<!-- Config Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm ring-1 ring-black/5">
+<h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">tune</span>
+                            Cấu hình nộp bài
+                        </h3>
+<div class="space-y-6">
+<div>
+<label class="block text-sm font-semibold mb-3 text-on-surface-variant">Chọn ngôn ngữ lập trình</label>
+<div class="grid grid-cols-3 gap-3">
+<label class="relative cursor-pointer group">
+<input checked="" class="peer sr-only" name="lang" type="radio"/>
+<div class="flex flex-col items-center p-4 rounded-xl bg-surface border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-3xl mb-1 text-slate-400 group-hover:text-primary transition-colors" data-icon="terminal">terminal</span>
+<span class="text-xs font-bold font-label uppercase">Python</span>
+</div>
+</label>
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="lang" type="radio"/>
+<div class="flex flex-col items-center p-4 rounded-xl bg-surface border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-3xl mb-1 text-slate-400 group-hover:text-primary transition-colors" data-icon="coffee">coffee</span>
+<span class="text-xs font-bold font-label uppercase">Java</span>
+</div>
+</label>
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="lang" type="radio"/>
+<div class="flex flex-col items-center p-4 rounded-xl bg-surface border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-3xl mb-1 text-slate-400 group-hover:text-primary transition-colors" data-icon="data_object">data_object</span>
+<span class="text-xs font-bold font-label uppercase">C++</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Upload Area -->
+<div>
+<label class="block text-sm font-semibold mb-3 text-on-surface-variant">Tải lên tệp nguồn</label>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-10 flex flex-col items-center justify-center text-center bg-surface-container-low/30 hover:bg-surface-container-low hover:border-primary transition-all cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<p class="text-on-surface font-semibold mb-1">Kéo và thả mã nguồn của bạn vào đây</p>
+<p class="text-xs text-outline font-label">Hỗ trợ các định dạng: .zip, .py, .java, .cpp (Tối đa 25MB)</p>
+<button class="mt-4 px-6 py-2 bg-white text-primary border border-primary/20 rounded-lg text-sm font-bold shadow-sm hover:bg-primary hover:text-white transition-all">
+                                        Chọn tệp từ máy tính
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Status Alert Card -->
+<div class="bg-gradient-to-br from-tertiary to-tertiary-container rounded-xl p-6 shadow-lg shadow-tertiary/20 relative overflow-hidden group">
+<div class="absolute -right-8 -bottom-8 opacity-10 group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-9xl text-white" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="flex items-start gap-4 relative z-10">
+<div class="bg-white/20 p-2 rounded-lg backdrop-blur-md">
+<span class="material-symbols-outlined text-white" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div>
+<h4 class="text-white font-bold text-lg mb-1">Kiểm tra sơ bộ AI đã bật</h4>
+<p class="text-white/80 text-sm leading-relaxed max-w-md">
+                                    Hệ thống sẽ tự động phân tích cấu trúc mã, kiểm tra tính hợp lệ và phát hiện trùng lặp ngay sau khi bạn nhấn nộp bài. Đảm bảo mã nguồn có đầy đủ chú thích.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Info Sidebar Column -->
+<div class="space-y-6">
+<!-- Deadline Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm ring-1 ring-black/5 overflow-hidden">
+<div class="flex items-center gap-2 mb-6 text-on-surface-variant font-bold text-sm uppercase tracking-wide">
+<span class="material-symbols-outlined text-primary text-xl">event_available</span>
+                            Thông tin nộp bài
+                        </div>
+<div class="space-y-6">
+<div class="flex flex-col">
+<span class="text-xs text-outline font-label mb-1">Hạn cuối nộp bài</span>
+<div class="flex items-center gap-3">
+<div class="bg-error/10 text-error p-2 rounded-lg">
+<span class="material-symbols-outlined text-xl">timer</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">23:59, 20 Tháng 10</p>
+<p class="text-xs text-error font-semibold">Còn lại: 2 ngày 4 giờ</p>
+</div>
+</div>
+</div>
+<div class="h-px bg-outline-variant/30"></div>
+<div class="flex flex-col">
+<span class="text-xs text-outline font-label mb-1">Thang điểm tối đa</span>
+<div class="flex items-center gap-3">
+<div class="bg-secondary-container/30 text-secondary p-2 rounded-lg">
+<span class="material-symbols-outlined text-xl">workspace_premium</span>
+</div>
+<div>
+<p class="font-bold text-on-surface text-xl">10.0 <span class="text-sm font-normal text-outline">điểm</span></p>
+<p class="text-xs text-outline">Gồm 7.0 code &amp; 3.0 báo cáo</p>
+</div>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full py-4 bg-primary text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 shadow-lg shadow-primary/30 hover:brightness-110 active:scale-95 transition-all">
+                                    NỘP BÀI NGAY
+                                    <span class="material-symbols-outlined">send</span>
+</button>
+<p class="text-[10px] text-center text-outline mt-3 px-4">Bằng việc nhấn nộp bài, bạn đồng ý với Quy tắc Liêm chính Học thuật của trường.</p>
+</div>
+</div>
+</div>
+<!-- Guidelines Card -->
+<div class="bg-surface-container-low/50 rounded-xl p-6 border border-outline-variant/20">
+<h4 class="font-bold text-sm mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">info</span>
+                            Lưu ý quan trọng
+                        </h4>
+<ul class="space-y-3">
+<li class="flex gap-3 text-xs text-on-surface-variant leading-tight">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mt-1 shrink-0"></span>
+                                Tên file .zip phải đặt theo định dạng: MSSV_HoTen_BaiTap4.zip
+                            </li>
+<li class="flex gap-3 text-xs text-on-surface-variant leading-tight">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mt-1 shrink-0"></span>
+                                Bạn có tối đa 3 lần nộp lại trước hạn chót.
+                            </li>
+<li class="flex gap-3 text-xs text-on-surface-variant leading-tight">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mt-1 shrink-0"></span>
+                                Bài làm trễ hạn sẽ bị trừ 10% số điểm mỗi ngày.
+                            </li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Recent Activity / History -->
+<section class="mt-12">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold font-headline">Lịch sử nộp bài gần đây</h3>
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:underline">
+                        Xem tất cả
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm ring-1 ring-black/5">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-outline uppercase text-[10px] font-bold tracking-widest">
+<th class="px-6 py-4">Lần nộp</th>
+<th class="px-6 py-4">Thời gian</th>
+<th class="px-6 py-4">Ngôn ngữ</th>
+<th class="px-6 py-4">Tệp tin</th>
+<th class="px-6 py-4">Trạng thái AI</th>
+<th class="px-6 py-4 text-right">Hành động</th>
+</tr>
+</thead>
+<tbody class="text-sm font-label divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="px-6 py-4 font-bold text-on-surface">#02</td>
+<td class="px-6 py-4 text-on-surface-variant">18/10/2023 14:20</td>
+<td class="px-6 py-4">
+<span class="bg-surface-container-high px-2 py-1 rounded text-[10px] font-bold">PYTHON</span>
+</td>
+<td class="px-6 py-4 text-primary italic">2112001_BT4_v2.zip</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-green-600 font-semibold text-xs">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+                                            Hợp lệ
+                                        </div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="px-6 py-4 font-bold text-on-surface">#01</td>
+<td class="px-6 py-4 text-on-surface-variant">17/10/2023 09:15</td>
+<td class="px-6 py-4">
+<span class="bg-surface-container-high px-2 py-1 rounded text-[10px] font-bold">PYTHON</span>
+</td>
+<td class="px-6 py-4 text-primary italic">2112001_BT4.zip</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-amber-600 font-semibold text-xs">
+<span class="material-symbols-outlined text-sm">warning</span>
+                                            Cảnh báo tối ưu
+                                        </div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Decorative Bottom Gradient for Depth -->
+<div class="fixed bottom-0 left-0 w-full h-24 bg-gradient-to-t from-surface to-transparent pointer-events-none z-10"></div>
+</body></html>

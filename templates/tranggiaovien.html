@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bảng điều khiển giáo viên | Scholarly</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-tertiary-fixed-variant": "#812800",
+                        "outline": "#737685",
+                        "surface": "#f8f9fb",
+                        "surface-container-high": "#e7e8ea",
+                        "on-tertiary-fixed": "#380d00",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#7b2600",
+                        "secondary-container": "#b6c8fe",
+                        "tertiary-container": "#a33500",
+                        "inverse-primary": "#b2c5ff",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "primary-fixed": "#dae2ff",
+                        "inverse-surface": "#2e3132",
+                        "outline-variant": "#c3c6d6",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "surface-container-low": "#f3f4f6",
+                        "surface-container-highest": "#e1e2e4",
+                        "tertiary-fixed-dim": "#ffb59b",
+                        "on-surface": "#191c1e",
+                        "on-secondary-fixed": "#021945",
+                        "surface-dim": "#d9dadc",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#b4c5fb",
+                        "surface-bright": "#f8f9fb",
+                        "inverse-on-surface": "#f0f1f3",
+                        "primary": "#003d9b",
+                        "surface-tint": "#0c56d0",
+                        "on-surface-variant": "#434654",
+                        "background": "#f8f9fb",
+                        "on-tertiary-container": "#ffc6b2",
+                        "primary-container": "#0052cc",
+                        "surface-variant": "#e1e2e4",
+                        "on-primary-fixed": "#001848",
+                        "on-primary-container": "#c4d2ff",
+                        "on-secondary-container": "#415382",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#344573",
+                        "tertiary-fixed": "#ffdbcf",
+                        "on-error": "#ffffff",
+                        "secondary": "#4c5d8d",
+                        "surface-container": "#edeef0",
+                        "secondary-fixed": "#dae2ff"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fb;
+        }
+        h1, h2, h3, .headline {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+{% from "partials/brand.html" import brand_block, teacher_sidebar_brand %}
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm dark:shadow-none flex items-center justify-between px-6 py-3">
+<div class="flex items-center gap-8">
+{{ brand_block('/teacher-dashboard') }}
+<div class="hidden md:flex items-center bg-surface-container-low px-4 py-1.5 rounded-full border-none">
+<span class="material-symbols-outlined text-outline mr-2 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-64 placeholder-outline" placeholder="Tìm bài hoặc sinh viên..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+{% include "partials/teacher_header_user.html" %}
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 z-50 bg-slate-50 dark:bg-slate-950 border-r border-slate-200/20 dark:border-slate-800/20 flex flex-col py-6">
+{{ teacher_sidebar_brand() }}
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 py-3 border-l-2 border-orange-600 dark:border-orange-500 text-orange-600 dark:text-orange-400 font-semibold pl-4 bg-transparent font-manrope text-sm transition-all" href="/teacher-dashboard">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Bảng điều khiển</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-slate-600 dark:text-slate-400 pl-4 font-manrope text-sm hover:text-orange-600 dark:hover:text-orange-300 transition-all" href="/teacher/submissions">
+<span class="material-symbols-outlined">terminal</span>
+<span>Bài kiểm tra</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-slate-600 dark:text-slate-400 pl-4 font-manrope text-sm hover:text-orange-600 dark:hover:text-orange-300 transition-all" href="/teacher/agents">
+<span class="material-symbols-outlined">smart_toy</span>
+<span>Tác nhân AI</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-slate-600 dark:text-slate-400 pl-4 font-manrope text-sm hover:text-orange-600 dark:hover:text-orange-300 transition-all" href="/teacher/classrooms">
+<span class="material-symbols-outlined">group</span>
+<span>Lớp học</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-slate-600 dark:text-slate-400 pl-4 font-manrope text-sm hover:text-orange-600 dark:hover:text-orange-300 transition-all" href="/teacher/reports">
+<span class="material-symbols-outlined">analytics</span>
+<span>Báo cáo</span>
+</a>
+</nav>
+<div class="px-4 mb-6">
+<a href="/teacher/assignment/new" class="block w-full text-center py-3 bg-primary text-on-primary rounded-xl font-headline text-sm font-bold shadow-sm hover:bg-primary-container transition-colors active:scale-95 duration-150">
+      Tạo nhiệm vụ mới
+    </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-20 px-8 pb-12 min-h-screen">
+<!-- Welcome Header -->
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-3xl font-extrabold font-headline tracking-tight text-on-surface">Tổng quan Giáo viên</h1>
+<p class="text-slate-500 mt-1 font-body">Chào mừng trở lại, {{ teacher_name }}. Đây là những gì đang diễn ra trong giáo trình của bạn hôm nay.</p>
+</div>
+<div class="flex gap-3">
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-lg text-sm font-medium">
+<span class="material-symbols-outlined text-primary text-lg">calendar_today</span>
+<span>{{ today }}</span>
+</div>
+</div>
+</div>
+<!-- Bento Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<!-- Stat Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12px_40px_rgba(25,28,30,0.04)] border border-white relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-6xl">description</span>
+</div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Tổng số bài nộp</p>
+<h3 class="text-3xl font-extrabold font-headline text-primary">{{ total_submissions }}</h3>
+<div class="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-600">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>Đang cập nhật từ database</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12px_40px_rgba(25,28,30,0.04)] border border-white relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500 text-primary">
+<span class="material-symbols-outlined text-6xl">check_circle</span>
+</div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Bài tập</p>
+<h3 class="text-3xl font-extrabold font-headline text-on-surface">{{ assignments|length if assignments else 0 }}</h3>
+<div class="mt-4 flex items-center gap-2 text-xs font-semibold text-emerald-600">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>Tổng số bài tập</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12px_40px_rgba(25,28,30,0.04)] border border-white relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500 text-error">
+<span class="material-symbols-outlined text-6xl">group</span>
+</div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Học sinh</p>
+<h3 class="text-3xl font-extrabold font-headline text-error">{{ total_students }}</h3>
+<div class="mt-4 flex items-center gap-2 text-xs font-semibold text-slate-600">
+<span class="material-symbols-outlined text-sm">info</span>
+<span>Tổng số học sinh</span>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12px_40px_rgba(25,28,30,0.04)] border border-white relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500 text-tertiary">
+<span class="material-symbols-outlined text-6xl">school</span>
+</div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Điểm trung bình</p>
+<h3 class="text-3xl font-extrabold font-headline text-tertiary">{% if avg_overall_score > 0 %}{{ avg_overall_score }}{% else %}N/A{% endif %}</h3>
+<div class="mt-4 flex items-center gap-2 text-xs font-semibold text-tertiary">
+<span class="material-symbols-outlined text-sm">stars</span>
+<span>Trung bình các bài tập</span>
+</div>
+</div>
+</div>
+<!-- Content Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Table Section -->
+<div class="lg:col-span-2 space-y-6">
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_12px_40px_rgba(25,28,30,0.04)] overflow-hidden">
+<div class="px-6 py-5 border-b border-slate-100/50 flex items-center justify-between">
+<h2 class="font-headline font-bold text-lg">Bài tập gần đây</h2>
+<div class="flex items-center gap-2">
+  <a href="/teacher/submissions" class="text-primary text-sm font-semibold hover:underline">Xem tất cả</a>
+  <label for="class-filter" class="text-xs font-semibold text-slate-500">Lọc lớp</label>
+  <select id="class-filter" class="rounded-lg border-slate-300 text-sm py-1.5">
+    <option value="">Tất cả lớp</option>
+    {% for c in class_filters %}
+    <option value="{{ c.class_id }}">{{ c.class_name }}</option>
+    {% endfor %}
+  </select>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/30">
+<th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bài tập</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Lớp học</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Phạm vi giao</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">SV nộp gần nhất</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bài nộp</th>
+<th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Điểm TB</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100/50">
+{% if assignments and assignments|length > 0 %}
+  {% for assignment in assignments[:10] %}
+  <tr class="hover:bg-surface-container-low transition-colors group cursor-pointer teacher-assignment-row"
+      data-assignment-id="{{ assignment.assignment_id }}"
+      data-assignment-title="{{ assignment.title }}"
+      data-class-id="{{ assignment.class_id }}">
+    <td class="px-6 py-4">
+      <span class="text-sm font-semibold text-on-surface">{{ assignment.title }}</span>
+    </td>
+    <td class="px-6 py-4">
+      <span class="text-sm text-slate-600">{{ assignment.class_name if assignment.class_name else 'N/A' }}</span>
+    </td>
+    <td class="px-6 py-4">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ assignment.target_scope_badge_class }}">
+        {{ assignment.target_scope_label }}
+      </span>
+    </td>
+    <td class="px-6 py-4">
+      <div class="text-sm text-slate-700">
+        {{ assignment.latest_student_name if assignment.latest_student_name else 'Chưa có' }}
+      </div>
+      <div class="text-xs text-slate-500">
+        {% if assignment.latest_submitted_at and assignment.latest_submitted_at.strftime %}
+          {{ assignment.latest_submitted_at.strftime("%d/%m/%Y %H:%M") }}
+        {% else %}
+          --
+        {% endif %}
+      </div>
+    </td>
+    <td class="px-6 py-4">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if assignment.total_submissions > 0 %}bg-emerald-100 text-emerald-800{% else %}bg-slate-100 text-slate-600{% endif %}">
+        {{ assignment.total_submissions if assignment.total_submissions else 0 }} bài
+      </span>
+    </td>
+    <td class="px-6 py-4 text-right">
+      <span class="text-sm font-bold text-on-surface">{% if assignment.avg_score and assignment.avg_score > 0 %}{{ "%.1f"|format(assignment.avg_score) }}{% else %}--{% endif %}</span>
+    </td>
+  </tr>
+  {% endfor %}
+{% else %}
+  <tr class="hover:bg-surface-container-low transition-colors">
+    <td colspan="6" class="px-6 py-4 text-center text-slate-500">Chưa có bài tập nào</td>
+  </tr>
+{% endif %}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Insights -->
+<div class="space-y-6">
+<!-- Latest Submission Detail -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12px_40px_rgba(25,28,30,0.04)]">
+<h3 class="font-headline font-bold text-slate-900 mb-2">Chi tiết nộp bài gần đây</h3>
+<p class="text-xs text-slate-500 mb-4" id="selected-assignment-hint">Chọn một bài ở bảng bên trái để xem danh sách sinh viên vừa nộp.</p>
+<div class="space-y-3 max-h-[360px] overflow-y-auto" id="recent-submission-content">
+<div class="text-sm text-slate-500">Chưa có dữ liệu.</div>
+</div>
+</div>
+<!-- Academic Calendar Preview -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_12px_40px_rgba(25,28,30,0.04)]">
+<h3 class="font-headline font-bold text-slate-900 mb-4">Hạn chót sắp tới</h3>
+<div class="space-y-5">
+{% if upcoming_deadlines and upcoming_deadlines|length > 0 %}
+{% for d in upcoming_deadlines %}
+<div class="flex gap-4">
+<div class="flex flex-col items-center justify-center bg-surface-container-low rounded-lg w-12 h-12 flex-shrink-0">
+<span class="text-[10px] font-bold text-slate-500 uppercase">{{ d.month_short }}</span>
+<span class="text-lg font-bold text-primary">{{ d.day_of_month }}</span>
+</div>
+<div class="flex flex-col justify-center min-w-0">
+<p class="text-sm font-bold truncate">{{ d.title }}</p>
+<p class="text-xs text-slate-500 truncate">{% if d.class_name %}{{ d.class_name }}{% else %}—{% endif %} · {{ d.weekday }} · {{ d.due_time }}</p>
+</div>
+</div>
+{% endfor %}
+{% else %}
+<p class="text-sm text-slate-500">Không có bài tập sắp đến hạn (hoặc tất cả đã quá hạn).</p>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="ml-64 w-auto mt-auto py-8 bg-slate-50 dark:bg-slate-950 border-t border-slate-100 dark:border-slate-900 flex flex-col items-center justify-center gap-4 px-8">
+<div class="flex gap-6">
+<a class="font-inter text-xs text-slate-500 hover:text-slate-900 transition-opacity duration-300 no-underline" href="#">Chính sách Bảo mật</a>
+<a class="font-inter text-xs text-slate-500 hover:text-slate-900 transition-opacity duration-300 no-underline" href="#">Điều khoản Dịch vụ</a>
+<a class="font-inter text-xs text-slate-500 hover:text-slate-900 transition-opacity duration-300 no-underline" href="#">Tài liệu Đạo đức AI</a>
+</div>
+<p class="font-inter text-xs text-slate-500 dark:text-slate-400">© Scholarly — Chấm bài thông minh</p>
+</footer>
+<script>
+(() => {
+  const rows = Array.from(document.querySelectorAll('.teacher-assignment-row'));
+  const contentEl = document.getElementById('recent-submission-content');
+  const hintEl = document.getElementById('selected-assignment-hint');
+
+  const setLoading = () => {
+    contentEl.innerHTML = '<div class="text-sm text-slate-500">Đang tải dữ liệu nộp bài...</div>';
+  };
+
+  const scoreBadgeClass = (score) => {
+    if (score >= 80) return 'bg-emerald-100 text-emerald-700';
+    if (score >= 60) return 'bg-amber-100 text-amber-700';
+    return 'bg-rose-100 text-rose-700';
+  };
+
+  const renderSubmissions = (assignmentTitle, submissions) => {
+    if (!submissions || submissions.length === 0) {
+      contentEl.innerHTML = '<div class="text-sm text-slate-500">Bài này chưa có sinh viên nộp.</div>';
+      return;
+    }
+
+    const html = submissions.map((item) => {
+      const total = Number(item.total_score || 0).toFixed(1);
+      return `
+        <div class="border border-slate-100 rounded-lg p-3">
+          <div class="flex items-start justify-between gap-3 mb-2">
+            <div>
+              <div class="text-sm font-semibold text-slate-900">${item.student_name || 'N/A'}</div>
+              <div class="text-xs text-slate-500">Lớp: ${item.class_name || '--'}</div>
+              <div class="text-xs text-slate-500">Nộp lúc: ${item.submitted_at || '--'}</div>
+            </div>
+            <span class="px-2 py-1 rounded-full text-xs font-bold ${scoreBadgeClass(Number(item.total_score || 0))}">
+              ${total}/100
+            </span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-[11px] text-slate-600">
+            <div>Cú pháp: <strong>${Number(item.syntax_score || 0).toFixed(0)}</strong></div>
+            <div>Phân tích: <strong>${Number(item.code_analysis_score || 0).toFixed(0)}</strong></div>
+            <div>Yêu cầu: <strong>${Number(item.requirement_score || 0).toFixed(0)}</strong></div>
+            <div>Cấu trúc: <strong>${Number(item.structure_score || 0).toFixed(0)}</strong></div>
+            <div>Test: <strong>${Number(item.test_score || 0).toFixed(0)}</strong></div>
+            <div>LLM: <strong>${Number(item.llm_score || 0).toFixed(0)}</strong></div>
+          </div>
+          <div class="mt-3 flex flex-wrap gap-x-3 gap-y-1">
+            <a href="/submission-result/${item.submission_id}#submitted-code" class="text-xs font-semibold text-slate-700 hover:underline">Xem code</a>
+            <span class="text-slate-300 hidden sm:inline">|</span>
+            <a href="/submission-result/${item.submission_id}" class="text-xs font-semibold text-orange-600 hover:underline">Kết quả chấm AI</a>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    contentEl.innerHTML = html;
+    hintEl.textContent = `Kết quả mới nhất của bài: ${assignmentTitle}`;
+  };
+
+  const setRowActive = (activeRow) => {
+    rows.forEach((row) => {
+      row.classList.remove('bg-surface-container-low');
+      if (row === activeRow) {
+        row.classList.add('bg-surface-container-low');
+      }
+    });
+  };
+
+  const classFilterEl = document.getElementById('class-filter');
+
+  const visibleRows = () => rows.filter((row) => row.style.display !== 'none');
+
+  const applyClassFilter = () => {
+    const selectedClassId = classFilterEl ? classFilterEl.value : '';
+    rows.forEach((row) => {
+      const rowClassId = row.getAttribute('data-class-id') || '';
+      const visible = !selectedClassId || rowClassId === selectedClassId;
+      row.style.display = visible ? '' : 'none';
+    });
+
+    const currentRows = visibleRows();
+    if (currentRows.length > 0) {
+      const preferred = currentRows.find((row) => !(row.textContent || '').includes('0 bài')) || currentRows[0];
+      loadAssignmentDetails(preferred);
+    } else {
+      hintEl.textContent = 'Không có bài tập cho lớp đã chọn.';
+      contentEl.innerHTML = '<div class="text-sm text-slate-500">Không có dữ liệu.</div>';
+    }
+  };
+
+  const loadAssignmentDetails = async (row) => {
+    const assignmentId = row.getAttribute('data-assignment-id');
+    const assignmentTitle = row.getAttribute('data-assignment-title') || `Bài ${assignmentId}`;
+    setRowActive(row);
+    setLoading();
+
+    try {
+      const response = await fetch(`/api/teacher/assignment/${assignmentId}/recent-submissions?limit=8`);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      const payload = await response.json();
+      renderSubmissions(assignmentTitle, payload.submissions || []);
+    } catch (error) {
+      contentEl.innerHTML = '<div class="text-sm text-rose-600">Không tải được dữ liệu nộp bài. Vui lòng thử lại.</div>';
+    }
+  };
+
+  rows.forEach((row) => {
+    row.addEventListener('click', () => loadAssignmentDetails(row));
+  });
+
+  const firstRowWithSubmission = rows.find((row) => {
+    const text = row.textContent || '';
+    return !text.includes('0 bài');
+  });
+
+  if (firstRowWithSubmission) {
+    loadAssignmentDetails(firstRowWithSubmission);
+  } else if (rows.length > 0) {
+    loadAssignmentDetails(rows[0]);
+  }
+
+  if (classFilterEl) {
+    classFilterEl.addEventListener('change', applyClassFilter);
+  }
+})();
+</script>
+</body></html>

@@ -1,0 +1,11 @@
+{# Avatar + tên + đăng xuất — dùng ở header các trang giáo viên #}
+<div class="flex items-center gap-2 sm:gap-3">
+  <div class="flex items-center gap-2 p-1 pr-2 sm:pr-3 rounded-full">
+    <span class="material-symbols-outlined text-orange-600 dark:text-orange-400">account_circle</span>
+    <span class="text-sm font-medium hidden sm:inline text-slate-900 dark:text-slate-100">{{ teacher_name or 'Giáo viên' }}</span>
+  </div>
+  <a href="/logout" class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-red-700 dark:hover:text-red-400 transition-colors no-underline" title="Đăng xuất">
+    <span class="material-symbols-outlined text-[20px]">logout</span>
+    <span class="hidden sm:inline">Đăng xuất</span>
+  </a>
+</div>
