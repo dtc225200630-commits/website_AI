@@ -76,7 +76,7 @@ if not os.path.exists("templates"):
 @contextmanager
 def get_db():
     # Lấy link từ Render, nếu không có thì mới dùng cấu hình localhost ở máy
-    db_url = os.getenv("DATABASE_URL", "postgresql://postgres:matkhau@localhost:5432/AI3")
+    db_url = os.getenv("DATABASE_URL", "postgresql://admin:syQULuHTP03idK10CPwiAIZVAucJJtCb@dpg-d82gv050lvsc738f1480-a.oregon-postgres.render.com/website_db_4cha")
     conn = psycopg2.connect(db_url)
     # conn = psycopg2.connect(DATABASE_URL)
     try:
