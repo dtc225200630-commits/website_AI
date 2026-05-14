@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import os
+from unittest.mock import Base
 import bcrypt
 import psycopg2
 import psycopg2.errors
@@ -17,6 +18,7 @@ from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from contextlib import contextmanager
+
 
 # Import Multi-Agent Coordinator
 try:
@@ -46,6 +48,9 @@ except ImportError:
 
 app = FastAPI()
 
+
+
+
 logger = logging.getLogger(__name__)
 
 templates = Jinja2Templates(directory="templates")
@@ -55,10 +60,13 @@ if os.path.isdir("static"):
 
 # Cấu hình CSDL (Đảm bảo db name MAS_Programming_Assessment đã tạo trong pgAdmin)
 # Có thể override bằng biến môi trường DATABASE_URL để tránh lệch DB khi chạy.
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://postgres:123456@localhost:5432/AI3",
-)
+# DATABASE_URL = os.getenv(
+#     "DATABASE_URL",
+#     "postgresql://postgres:123456@localhost:5432/AI3",
+# )
+
+# Tự động đọc link database từ Render, nếu chạy dưới máy local thì dùng localhost
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:matkhau@localhost:5432/AI3")
 
 # Mount thư mục chứa các file giao diện
 # Tạo thư mục 'templates' và bỏ các file html vào đó nhé
@@ -67,7 +75,10 @@ if not os.path.exists("templates"):
 
 @contextmanager
 def get_db():
-    conn = psycopg2.connect(DATABASE_URL)
+    # Lấy link từ Render, nếu không có thì mới dùng cấu hình localhost ở máy
+    db_url = os.getenv("DATABASE_URL", "postgresql://postgres:matkhau@localhost:5432/AI3")
+    conn = psycopg2.connect(db_url)
+    # conn = psycopg2.connect(DATABASE_URL)
     try:
         yield conn
     finally:
